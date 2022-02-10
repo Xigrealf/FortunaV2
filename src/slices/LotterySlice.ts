@@ -172,16 +172,20 @@ export const getTicketsMockTether = async (currentAddress: string,amount: string
     console.log(currentAddress,amount,provider,networkID);
     // const signer = provider.getSigner();
     const lotteryContract = Lottery__Factory.connect(addresses[networkID].LOTTERY_ADDRESS , provider);
-
+    console.log("LotteryContract is ",lotteryContract);
     let approveTx;
     let ticketTx;
     const mockTetherContract = MockTether__Factory.connect(addresses[networkID].MOCKTETHER_ADDRESS, provider);
     const allowance = await mockTetherContract.allowance(currentAddress, lotteryContract.address)
-
+    
+    console.log("MockTetherContract is ", mockTetherContract);
+    console.log("Allowance is ", allowance);
     if (allowance > utils.parseEther(amount)) {
         try {
+            console.log("Inside allowance bigger than if")
             ticketTx = await lotteryContract.getTickets(amount);
             await ticketTx.wait();
+            console.log(ticketTx);
         }
         catch (e: unknown) {
             return {
@@ -202,25 +206,28 @@ export const getTicketsMockTether = async (currentAddress: string,amount: string
     }
     else {
         try {
+            console.log("Inside allowance less than if", utils.parseEther(amount))
             approveTx = await mockTetherContract.approve(lotteryContract.address, utils.parseEther(amount))
             await approveTx.wait();
+            console.log("ApproveTx is : ",approveTx);
         } catch (e: unknown) {
             return {
                 success: false,
                 message: (e as IJsonRPCError).message,
-                hash: approveTx.hash,
+                hash: approveTx,
             };
         }
         finally {
             try {
                 ticketTx = await lotteryContract.getTickets(amount);
                 await ticketTx.wait();
+                console.log("TicketTx is : ",ticketTx);
             }
             catch (e: unknown) {
                 return {
                     success: false,
                     message: (e as IJsonRPCError).message,
-                    hash: ticketTx.hash,
+                    hash: ticketTx,
                 };
             }
             finally {
@@ -228,7 +235,7 @@ export const getTicketsMockTether = async (currentAddress: string,amount: string
                     return {
                         success: true,
                         message: "Transaction Successfull",
-                        hash: ticketTx.hash,
+                        hash: ticketTx,
                     };
                 }
             }

@@ -5,7 +5,6 @@ import { Link } from '@reach/router';
 import useOnclickOutside from "react-cool-onclickoutside";
 import { useWeb3Context, Web3ContextProvider } from "../../hooks/Web3Context";
 import ConnectButton from "../components/Buttons/ConnectButton";
-let provider;
 
 setDefaultBreakpoints([
   { xs: 0 },
@@ -117,26 +116,10 @@ const Header = function ({ className }) {
           <div className='logo px-0'>
             <div className='navbar-title navbar-item'>
               <NavLink to="/home2Grey">
-                <img
-                  src="/img/logo.png"
-                  className="img-fluid d-block"
-                  alt="#"
-                />
-                <img
-                  src="/img/logo-2.png"
-                  className="img-fluid d-3"
-                  alt="#"
-                />
-                <img
-                  src="/img/logo-3.png"
-                  className="img-fluid d-4"
-                  alt="#"
-                />
-                <img
-                  src="/img/logo-light.png"
-                  className="img-fluid d-none"
-                  alt="#"
-                />
+                <img src="/img/logo.png" className="img-fluid d-block" alt="#" />
+                <img src="/img/logo-2.png" className="img-fluid d-3" alt="#" />
+                <img src="/img/logo-3.png" className="img-fluid d-4" alt="#" />
+                <img src="/img/logo-light.png" className="img-fluid d-none" alt="#" />
               </NavLink>
             </div>
           </div>
