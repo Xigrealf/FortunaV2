@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Reveal from 'react-awesome-reveal';
 import { keyframes } from "@emotion/react";
 import Particle from './Particle';
+import MintTicketButton from './Buttons/MintTicketButton';
 
 const fadeInUp = keyframes`
   0% {
@@ -27,6 +28,8 @@ const inline = keyframes`
    }
 `;
 
+
+
 const slidermainparticle = () => (
   <div className="container">
     <div className="row align-items-center">
@@ -44,7 +47,7 @@ const slidermainparticle = () => (
         </Reveal>
         <div className="spacer-10"></div>
         <Reveal className='onStep d-inline' keyframes={inline} delay={800} duration={900} triggerOnce>
-          <span onClick={() => window.open("#", "_self")} className="btn-main inline lead">Explore</span>
+          <MintTicketButton />
           <div className="mb-sm-30"></div>
         </Reveal>
 
@@ -78,7 +81,7 @@ const slidermainparticle = () => (
       </div>
       <div className="col-md-6 xs-hide">
         <Reveal className='onStep d-inline' keyframes={inline} delay={300} duration={1200} triggerOnce>
-          <img src="https://cdn.discordapp.com/attachments/939445012788314123/940146272004890694/unknown.png" className="img-fluid" alt="" />
+          <img src="https://cdn.discordapp.com/attachments/939445012788314123/941356209603235840/ezgif.com-gif-maker.gif" className="img-fluid" alt="" />
         </Reveal>
       </div>
     </div>
