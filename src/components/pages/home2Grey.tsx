@@ -15,7 +15,7 @@ const theme = 'GREY'; //LIGHT, GREY, RETRO
 const homeone= () => (
   <div className="greyscheme">
   <StyledHeader theme={theme} />
-      <section className="jumbotron no-bg relative" style={{backgroundImage: `url(${'./img/background/8.jpg'})`}}>
+      <section className="jumbotron no-bg relative" style={{backgroundImage: `url(${'./img/FortunaImages/fortunaFlashy.gif'})`}}>
        {/* <Particle/> */}
          <SliderMainParticleGrey/>
       </section>

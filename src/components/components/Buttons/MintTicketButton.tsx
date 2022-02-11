@@ -24,9 +24,9 @@ const MintTicketButton: React.FC = () => {
     const { connect, provider, address, networkId } = useWeb3Context();
 
     console.log("Here!");
-    async function GetTicket() {
+    const GetTicket = async () => {
         console.log("In Dispatch Function!");
-        await dispatch(getTicketsMockTether(address, "1", provider, networkId));
+        await dispatch(getTicketsMockTether({ currentAddress: address, amount: "1", provider, networkID: networkId }));
     }
     return (
         <div>
