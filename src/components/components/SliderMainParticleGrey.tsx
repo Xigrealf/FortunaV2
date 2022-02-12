@@ -36,15 +36,18 @@ const slidermainparticle = () => (
       <div className="col-md-6">
         <Particle />
         <div className="spacer-single"></div>
+        <div className="spacer-single"></div>
+        <div className="spacer-single"></div>
+        <div className="spacer-single"></div>
         <h1> <span className="text-uppercase color">Welcome To Fortuna</span></h1>
         <Reveal className='onStep' keyframes={fadeInUp} delay={300} duration={900} triggerOnce>
           <h1 className="col-white">Create, sell or collect digital items.</h1>
         </Reveal>
-        <Reveal className='onStep' keyframes={fadeInUp} delay={600} duration={900} triggerOnce>
+        {/* <Reveal className='onStep' keyframes={fadeInUp} delay={600} duration={900} triggerOnce>
           <p className="lead col-white">
             Unit of data stored on a digital ledger, called a blockchain, that certifies a digital asset to be unique and therefore not interchangeable
           </p>
-        </Reveal>
+        </Reveal> */}
         <div className="spacer-10"></div>
         <Reveal className='onStep d-inline' keyframes={inline} delay={800} duration={900} triggerOnce>
           <MintTicketButton />

@@ -15,11 +15,11 @@ const theme = 'GREY'; //LIGHT, GREY, RETRO
 const homeone= () => (
   <div className="greyscheme">
   <StyledHeader theme={theme} />
-      <section className="jumbotron no-bg relative" style={{backgroundImage: `url(${'./img/FortunaImages/fortunaFlashy.gif'})`}}>
+      <section className="jumbotron no-bg relative" style={{backgroundImage: `url(${'./img/FortunaImages/FortunaHome.png'})`}}>
        {/* <Particle/> */}
          <SliderMainParticleGrey/>
       </section>
-
+  
       <section className='container no-bottom'>
         <div className="row">
             <div className="col-lg-2 col-sm-4 col-6 mb30">
