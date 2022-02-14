@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import Reveal from 'react-awesome-reveal';
 import { keyframes } from "@emotion/react";
 import Particle from './Particle';
-import MintTicketButton from './Buttons/MintTicketButton';
+import ForwardToMint from './Buttons/ForwardToMint';
 
 const fadeInUp = keyframes`
   0% {
@@ -38,10 +38,11 @@ const slidermainparticle = () => (
         <div className="spacer-single"></div>
         <div className="spacer-single"></div>
         <div className="spacer-single"></div>
-        <div className="spacer-single"></div>
+        <div className="spacer-10"></div>
         <h1> <span className="text-uppercase color">Welcome To Fortuna</span></h1>
         <Reveal className='onStep' keyframes={fadeInUp} delay={300} duration={900} triggerOnce>
-          <h1 className="col-white">Create, sell or collect digital items.</h1>
+          <h1 className="col-white">Charity, Raffle, </h1>
+          <h1 className="col-white"> NFT </h1>
         </Reveal>
         {/* <Reveal className='onStep' keyframes={fadeInUp} delay={600} duration={900} triggerOnce>
           <p className="lead col-white">
@@ -50,7 +51,7 @@ const slidermainparticle = () => (
         </Reveal> */}
         <div className="spacer-10"></div>
         <Reveal className='onStep d-inline' keyframes={inline} delay={800} duration={900} triggerOnce>
-          <MintTicketButton />
+          <ForwardToMint />
           <div className="mb-sm-30"></div>
         </Reveal>
 
@@ -82,11 +83,11 @@ const slidermainparticle = () => (
           </div>
         </Reveal>
       </div>
-      <div className="col-md-6 xs-hide">
+      {/* <div className="col-md-6 xs-hide">
         <Reveal className='onStep d-inline' keyframes={inline} delay={300} duration={1200} triggerOnce>
           <img src="https://cdn.discordapp.com/attachments/939445012788314123/939446551661658142/black_logo_without_background.png" className="img-fluid" alt="" />
         </Reveal>
-      </div>
+      </div> */}
     </div>
   </div>
 );
