@@ -248,7 +248,7 @@ const Header = function ({ className }) {
 
             <Breakpoint xl>
               <div className='menu'>
-                <div className='navbar-item'>
+                {/* <div className='navbar-item'>
                   <div ref={ref}>
                     <div className="dropdown-custom dropdown-toggle btn"
                       onMouseEnter={handleBtnClick} onMouseLeave={closeMenu}>
@@ -256,24 +256,24 @@ const Header = function ({ className }) {
                       <span className='lines'></span>
                       {openMenu && (
                         <div className='item-dropdown'>
-                          <div className="dropdown" onClick={closeMenu}>
+                          <div className="dropdown" onClick={closeMenu}> */}
                             {/* <NavLink to="/homeGrey">Homepage Grey</NavLink>
                               <NavLink to="/">Homepage</NavLink>
                               <NavLink to="/home1">Homepage 1</NavLink>
                               <NavLink to="/home1Grey">Homepage 1 Grey</NavLink> */}
                             {/* <NavLink to="/home2">Homepage 2</NavLink> */}
-                            <NavLink to="/home2Grey">Homepage</NavLink>
+                            {/* <NavLink to="/home2Grey">Homepage</NavLink> */}
                             {/* <NavLink to="/home3">Homepage 3</NavLink>
                               <NavLink to="/home4">Homepage 4</NavLink>
                               <NavLink to="/home5">Homepage 5</NavLink>
                               <NavLink to="/home6">Homepage 6</NavLink> */}
-                          </div>
+                          {/* </div>
                         </div>
                       )}
                     </div>
 
                   </div>
-                </div>
+                </div> */}
                 {/* <div className='navbar-item'>
                     <div ref={ref1}>
                       <div className="dropdown-custom dropdown-toggle btn"
@@ -338,13 +338,13 @@ const Header = function ({ className }) {
                       </div>
                     </div>
                   </div> */}
-                <div className='navbar-item'>
-                  <NavLink to="/activity">
-                    Activity
+               <div className='navbar-item'>
+                  <NavLink to="/">
+                    Home
                     <span className='lines'></span>
                   </NavLink>
                 </div>
-                <div className='navbar-item'>
+                {/* <div className='navbar-item'>
                   <div ref={ref3}>
                     <div className="dropdown-custom dropdown-toggle btn"
                       onMouseEnter={handleBtnClick3} onMouseLeave={closeMenu3}>
@@ -366,7 +366,7 @@ const Header = function ({ className }) {
                       )}
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
             </Breakpoint>
           </BreakpointProvider>

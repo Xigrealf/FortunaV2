@@ -2,17 +2,8 @@ import React from 'react';
 import { Router, Location, Redirect } from '@reach/router';
 import ScrollToTopBtn from './menu/ScrollToTop';
 import Header from './menu/header';
-// import Home from './pages/home';
-import HomeGrey from './pages/homeGrey';
-import Home1 from './pages/home1';
-import Home1grey from './pages/home1Grey';
-import Home2 from './pages/home2';
 import Home from './pages/home2Grey';
 import Home2grey from './pages/home2Grey';
-import Home3 from './pages/home3';
-import Home4 from './pages/home4';
-import Home5 from './pages/home5';
-import Home6 from './pages/home6';
 import Explore from './pages/explore';
 import Exploregrey from './pages/exploreGrey';
 import Explore2 from './pages/explore2';
@@ -21,10 +12,6 @@ import ExploreOpensea from './pages/Opensea/explore';
 // import Rangking from './pages/rangking';
 import RankingRedux from './pages/RankingRedux';
 import RankingReduxgrey from './pages/RankingReduxGrey';
-import Auction from './pages/Auction';
-import Auctiongrey from './pages/AuctionGrey';
-import Helpcenter from './pages/helpcenter';
-import Helpcentergrey from './pages/helpcenterGrey';
 import Colection from './pages/colection';
 import Colectiongrey from './pages/colectionGrey';
 // import ItemDetail from './pages/ItemDetail';
@@ -33,8 +20,6 @@ import ItemDetailReduxgrey from './pages/ItemDetailReduxGrey';
 import Author from './pages/Author';
 import AuthorGrey from './pages/AuthorGrey';
 import AuthorOpensea from './pages/Opensea/author';
-import Wallet from './pages/wallet';
-import WalletGrey from './pages/walletGrey';
 import Login from './pages/login';
 import Logingrey from './pages/loginGrey';
 import LoginTwo from './pages/loginTwo';
@@ -74,7 +59,7 @@ const GlobalStyles = createGlobalStyle`
 `;
 
 export const ScrollTop = ({ children, location }) => {
-  React.useEffect(() => window.scrollTo(0,0), [location])
+  React.useEffect(() => window.scrollTo(0, 0), [location])
   return children
 }
 
@@ -92,24 +77,17 @@ const PosedRouter = ({ children }) => (
   </Location>
 );
 
-const app= () => (
+const app = () => (
   <div className="wraper">
-  <GlobalStyles />
-    <Header/>
-      <PosedRouter>
+    <GlobalStyles />
+    <Header />
+    <PosedRouter>
       <ScrollTop path="/">
         <Home exact path="/">
           <Redirect to="/" />
         </Home>
-        <HomeGrey path="/homeGrey" />
-        <Home1 path="/home1" />
-        <Home1grey path="/home1Grey" />
-        <Home2 path="/home2" />
+        
         <Home2grey path="/home2Grey" />
-        <Home3 path="/home3" />
-        <Home4 path="/home4" />
-        <Home5 path="/home5" />
-        <Home6 path="/home6" />
         <Explore path="/explore" />
         <Exploregrey path="/exploreGrey" />
         <Explore2 path="/explore2" />
@@ -117,10 +95,6 @@ const app= () => (
         <ExploreOpensea path="/exploreOpensea" />
         <RankingRedux path="/rangking" />
         <RankingReduxgrey path="/rangkingGrey" />
-        <Auction path="/Auction" />
-        <Auctiongrey path="/AuctionGrey" />
-        <Helpcenter path="/helpcenter" />
-        <Helpcentergrey path="/helpcenterGrey" />
         <Colection path="/colection/:collectionId" />
         <Colectiongrey path="/colectionGrey/:collectionId" />
         <ItemDetailRedux path="/ItemDetail/:nftId" />
@@ -129,8 +103,6 @@ const app= () => (
         <Profile path="/Profile/:authorId" />
         <AuthorGrey path="/AuthorGrey/:authorId" />
         <AuthorOpensea path="/AuthorOpensea" />
-        <Wallet path="/wallet" />
-        <WalletGrey path="/walletGrey" />
         <Login path="/login" />
         <Logingrey path="/loginGrey" />
         <LoginTwo path="/loginTwo" />
@@ -159,8 +131,8 @@ const app= () => (
         <Tabs path="/tabs" />
         <Minter path="/mint" />
         <Mintergrey path="/minter" />
-        </ScrollTop>
-      </PosedRouter>
+      </ScrollTop>
+    </PosedRouter>
     <ScrollToTopBtn />
   </div>
 );
