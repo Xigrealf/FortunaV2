@@ -10,6 +10,7 @@ import Footer from '../components/footer';
 //IMPORT DYNAMIC STYLED COMPONENT
 import { StyledHeader } from '../Styles';
 import MintBox from '../components/MintBox';
+import NFTCarousel from '../components/NFTCarousel';
 //SWITCH VARIABLE FOR PAGE STYLE
 const theme = 'GREY'; //LIGHT, GREY, RETRO
 
@@ -37,10 +38,10 @@ const homeone = () => (
       <div className='row'>
         <div className="spacer-double"></div>
         <div className='col-lg-12 mb-2'>
-          <h2>New Items</h2>
+          <h2>Raffle NFT's</h2>
         </div>
       </div>
-      <CarouselNewRedux />
+      <NFTCarousel />
     </section>
 
     {/* <section className='container no-top no-bottom'>

@@ -2,6 +2,7 @@ import React from 'react';
 import Reveal from 'react-awesome-reveal';
 import { keyframes } from "@emotion/react";
 import MintTicketButton from './Buttons/MintTicketButton';
+import styled from "styled-components";
 
 const fadeInUp = keyframes`
   0% {
@@ -15,17 +16,64 @@ const fadeInUp = keyframes`
     transform: translateY(0);
   }
 `;
+const Outer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+`;
 
-
+// const onImgLoad = ({ target: img }) => {
+//     let currentHeight = height;
+//     if (currentHeight < img.offsetHeight) {
+//         setHeight(img.offsetHeight);
+//     }
+// }
 const MintBox = () => (
+
+    // <div className='row'>
+    //     <div className="spacer-10"></div>
+    //     <div className="col-lg-4 col-md-6 mb-3 w-100">
+    //         <div className="feature-box f-boxed style-3">
+    //             <section className="jumbotron no-bg relative" style={{ backgroundImage: `url(${'./img/FortunaImages/FortunaPrizes.png'})` }}>
+    //             </section>
+    //         </div>
+    //     </div>
+    //     <div className="col-lg-4 col-md-6 mb-3 w-100">
+    //         <div className="feature-box f-boxed style-3">
+    //             <Reveal className='onStep' keyframes={fadeInUp} delay={0} duration={600} triggerOnce>
+    //                 <div className="text-center">
+    //                     {/* <i className="bg-color-2 i-boxed icon_wallet"></i> */}
+    //                     <img class="img-responsive" src="/img/USDC.png" className="img-fluid d-4" alt="#" />
+    //                 </div>
+    //             </Reveal>
+    //             <div className="text">
+    //                 <div className="text-center">
+    //                     <MintTicketButton />
+    //                 </div>
+    //             </div>
+    //             <i className="wm icon_wallet"></i>
+    //         </div>
+    //     </div>
+    // </div>
     <div className='row'>
-        <div className="spacer-10"></div>
-        <div className="col-lg-4 col-md-6 mb-3 w-100">
+        <div className="col-lg-6 col-md-6 mb-3">
+            {/* <div className="feature-box f-boxed style-3"> */}
+            {/* <img }}> */}
+            <Reveal className='onStep' keyframes={fadeInUp} delay={0} duration={600} triggerOnce>
+                <span>
+                    <img src={"./img/FortunaImages/FortunaPrizes.png"} className="lazy nft__item_preview img-fluid" />
+                </span>
+            </Reveal>
+            {/* <i className="wm icon_wallet"></i> */}
+            {/* </div> */}
+        </div>
+        <div className="col-lg-6 col-md-6 mb-3">
             <div className="feature-box f-boxed style-3">
                 <Reveal className='onStep' keyframes={fadeInUp} delay={0} duration={600} triggerOnce>
                     <div className="text-center">
                         {/* <i className="bg-color-2 i-boxed icon_wallet"></i> */}
-                        <img src="/img/USDC.png" className="img-fluid d-4" alt="#" />
+                        <img class="img-responsive" src="/img/USDC.png" className="img-fluid d-4" alt="#" />
                     </div>
                 </Reveal>
                 <div className="text">
@@ -36,6 +84,6 @@ const MintBox = () => (
                 <i className="wm icon_wallet"></i>
             </div>
         </div>
-    </div>
+    </div >
 );
 export default MintBox;

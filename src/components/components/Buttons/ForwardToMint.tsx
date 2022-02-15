@@ -33,7 +33,7 @@ const MintTicketButton: React.FC = () => {
             {!address
                 ? (
                     <Reveal className='onStep d-inline' keyframes={inline} delay={800} duration={900} triggerOnce>
-                        <span onClick={connect} className="btn-main inline lead"> Please Connect Your Wallet In Order To Mint! </span>
+                        <span onClick={connect} className="btn-main inline lead"> Please Connect Your Wallet In Order To Participate! </span>
                         <span className='lines'></span>
                         <div className="mb-sm-30"></div>
                     </Reveal>
