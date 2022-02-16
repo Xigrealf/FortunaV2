@@ -39,7 +39,7 @@ const slidermainparticle = () => (
         <div className="spacer-single"></div>
         <div className="spacer-single"></div>
         <div className="spacer-10"></div>
-        <h1> <span className="text-uppercase color">Welcome To Fortuna</span></h1>
+
         <Reveal className='onStep' keyframes={fadeInUp} delay={300} duration={900} triggerOnce>
           <h1 className="col-white">Charity, Raffle, </h1>
           <h1 className="col-white"> NFT </h1>
