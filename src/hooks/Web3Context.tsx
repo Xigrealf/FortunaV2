@@ -5,7 +5,6 @@ import React, { ReactElement, useCallback, useContext, useMemo, useState } from 
 import { idFromHexString, initNetworkFunc } from "../helpers/NetworkHelper";
 import { NodeHelper } from "../helpers/NodeHelper";
 import Web3Modal from "web3modal";
-
 import { NETWORKS } from "../constants/networkDetails";
 
 /**
@@ -58,30 +57,33 @@ export const useAddress = () => {
 
 const initModal = new Web3Modal({
   // network: "mainnet", // optional
-  cacheProvider: true, // optional
+  cacheProvider: false, // optional
+  disableInjectedProvider: false,
   providerOptions: {
+    // Example with injected providers
+  injected: {
+    display: {
+      logo: "data:image/gif;base64,INSERT_BASE64_STRING",
+      name: "Injected",
+      description: "Connect with the provider in your Browser"
+    },
+    package: Web3Provider,
+    options: {
+      rpc: {
+        137: NETWORKS[137].uri(),
+        80001: NETWORKS[80001].uri(),
+      },
+    },
+  },
     walletconnect: {
       package: WalletConnectProvider,
       options: {
         rpc: {
-          // 1: NETWORKS[1].uri(),
-          // 4: NETWORKS[4].uri(),
           137: NETWORKS[137].uri(),
           80001: NETWORKS[80001].uri(),
-          // 43113: NETWORKS[43113].uri(),
-          // 43114: NETWORKS[43114].uri(),
         },
       },
     },
-    injected: {
-      package:Web3Provider,
-      options: {
-        rpc: {
-          137: NETWORKS[137].uri(),
-          80001: NETWORKS[80001].uri(),
-        }
-      }
-    }
   },
 });
 
@@ -94,6 +96,7 @@ export const Web3ContextProvider: React.FC<{ children: ReactElement }> = ({ chil
   const [networkName, setNetworkName] = useState("");
   const [providerUri, setProviderUri] = useState("");
   const [providerInitialized, setProviderInitialized] = useState(false);
+  console.log("hey");
 
   const [web3Modal, setWeb3Modal] = useState<Web3Modal>(initModal);
   web3Modal.clearCachedProvider();
@@ -137,6 +140,7 @@ export const Web3ContextProvider: React.FC<{ children: ReactElement }> = ({ chil
     if (isIframe()) {
       rawProvider = new IFrameEthereumProvider();
     } else {
+      console.log("awaitweb3modal");
       rawProvider = await web3Modal.connect();
     }
 
