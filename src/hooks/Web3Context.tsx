@@ -64,15 +64,24 @@ const initModal = new Web3Modal({
       package: WalletConnectProvider,
       options: {
         rpc: {
-          1: NETWORKS[1].uri(),
-          4: NETWORKS[4].uri(),
+          // 1: NETWORKS[1].uri(),
+          // 4: NETWORKS[4].uri(),
           137: NETWORKS[137].uri(),
           80001: NETWORKS[80001].uri(),
-          43113: NETWORKS[43113].uri(),
-          43114: NETWORKS[43114].uri(),
+          // 43113: NETWORKS[43113].uri(),
+          // 43114: NETWORKS[43114].uri(),
         },
       },
     },
+    injected: {
+      package:Web3Provider,
+      options: {
+        rpc: {
+          137: NETWORKS[137].uri(),
+          80001: NETWORKS[80001].uri(),
+        }
+      }
+    }
   },
 });
 
@@ -87,7 +96,7 @@ export const Web3ContextProvider: React.FC<{ children: ReactElement }> = ({ chil
   const [providerInitialized, setProviderInitialized] = useState(false);
 
   const [web3Modal, setWeb3Modal] = useState<Web3Modal>(initModal);
-
+  web3Modal.clearCachedProvider();
   const hasCachedProvider = (): boolean => {
     if (!web3Modal) return false;
     if (!web3Modal.cachedProvider) return false;
@@ -122,6 +131,7 @@ export const Web3ContextProvider: React.FC<{ children: ReactElement }> = ({ chil
 
   // connect - only runs for WalletProviders
   const connect = useCallback(async () => {
+    await disconnect;
     // handling Ledger Live;
     let rawProvider;
     if (isIframe()) {
