@@ -4,14 +4,19 @@ import React from "react";
 import { useWeb3Context, Web3ContextProvider } from "../../../hooks/Web3Context";
 
 const ConnectButton: React.FC = () => {
-  const { connect, provider, address, networkId } = useWeb3Context();
+  const { connect, provider, address, networkId, disconnect } = useWeb3Context();
 
   return (
     <div>
       {!address ? (
-        <Link onClick={connect}>
-          <span>Connect Wallet</span>
-        </Link>)
+        <div>
+          <Link onClick={connect}>
+            <span>Connect Wallet</span>
+          </Link>
+          <Link onClick={disconnect} >
+            <span>Disconnect</span>
+          </Link>
+        </div>)
         : <div className='navbar-item'>
           <Link>
             {address}

@@ -115,7 +115,7 @@ const Header = function ({ className }) {
         <div className='row w-100-nav'>
           <div className='logo px-0'>
             <div className='navbar-title navbar-item'>
-              <NavLink to="/home2Grey">
+              <NavLink to="./home2Grey">
                 <img src="/img/logo.png" className="img-fluid d-block" alt="#" />
                 <img src="/img/logo-2.png" className="img-fluid d-3" alt="#" />
                 <img src="/img/FortunaIcon2.png" className="img-fluid d-4" alt="#" />

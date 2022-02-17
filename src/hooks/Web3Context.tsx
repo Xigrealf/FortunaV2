@@ -62,11 +62,6 @@ const initModal = new Web3Modal({
   providerOptions: {
     // Example with injected providers
   injected: {
-    display: {
-      logo: "data:image/gif;base64,INSERT_BASE64_STRING",
-      name: "Injected",
-      description: "Connect with the provider in your Browser"
-    },
     package: Web3Provider,
     options: {
       rpc: {
