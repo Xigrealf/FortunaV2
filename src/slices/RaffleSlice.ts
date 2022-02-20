@@ -211,8 +211,6 @@ export const getCurrentRaffleBalance = createAsyncThunk(
     }
 );
 
-
-
 export const getTicketsMockTether = createAsyncThunk(
     "lottery/GetTicket",
     async ({ currentAddress, amount, provider, networkID }: IGetTicketsAsyncThunk, { dispatch }) => {
@@ -227,13 +225,21 @@ export const getTicketsMockTether = createAsyncThunk(
         let ticketTx;
         const mockTetherContract = MockTether__Factory.connect(addresses[networkID].MOCKTETHER_ADDRESS, provider.getSigner());
         const allowance = await mockTetherContract.allowance(currentAddress, raffleContract.address)
-
+        const gasPrice = await provider.getGasPrice();
+        console.log("🚀 ~ file: RaffleSlice.ts ~ line 229 ~ gasPrice", gasPrice)
+        let overrides: any = {
+            gasLimit: 300000,
+            gasPrice: gasPrice
+          };
         console.log("MockTetherContract is ", mockTetherContract);
         console.log("Allowance is ", allowance);
         if (allowance > utils.parseEther(amount)) {
             try {
                 console.log("Inside allowance bigger than if")
-                ticketTx = await raffleContract.getTickets(amount);
+                ticketTx = await raffleContract.getTickets(
+                    amount,
+                    overrides);
+                   
                 await ticketTx.wait();
                 console.log(ticketTx);
             } catch (e: unknown) {
@@ -264,10 +270,12 @@ export const getTicketsMockTether = createAsyncThunk(
             } finally {
                 if (approveTx) {
                     dispatch(clearPendingTxn(approveTx.hash));
-                    console.log("Transaciotn Approved!");
+                    console.log("Transaction Approved!");
                     try {
                         console.log("Inside 2nd Try!");
-                        ticketTx = await raffleContract.getTickets(amount);
+                        ticketTx = await raffleContract.getTickets(
+                            amount,
+                            overrides);
                         dispatch(
                             fetchPendingTxns({
                                 txnHash: ticketTx.hash,

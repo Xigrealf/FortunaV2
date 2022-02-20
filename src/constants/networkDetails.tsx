@@ -55,10 +55,10 @@ export const addresses: IAddresses = {
     MATIC_ADDRESS: "0x0000000000000000000000000000000000001010",
   },
   [NetworkId.POLYGON_TESTNET]: {
-    RAFFLE_ADDRESS: "0xbD6E5E6dFe8c371F5c92E3A81fb017a2F00e1972",
+    RAFFLE_ADDRESS: "0x58fd753F2e284a6190869403B5E54772DF0051F4",
     DAI_ADDRESS: "",
     USDC_ADDRESS: "",
-    MOCKTETHER_ADDRESS: "0x399548194BcA0262afebebEb498e409cA8e730b6",
+    MOCKTETHER_ADDRESS: "0xfFB664d201b612Ac0E23a565F9883EB790B446E1",
   },
   [NetworkId.FANTOM]: {
 
@@ -201,11 +201,11 @@ export const NETWORKS: { [key: number]: INetwork } = {
       symbol: "MATIC",
       decimals: 18,
     },
-    rpcUrls: ["https://polygon-rpc.com"],
+    rpcUrls: ["https://rpc-mumbai.maticvigil.com/"],
     blockExplorerUrls: ["https://mumbai.polygonscan.com/"],
     image: "./assets/tokens/matic.svg",
     imageAltText: "Polygon Logo",
-    uri: () => "", // NodeHelper.getMainnetURI(NetworkId.POLYGON_TESTNET),
+    uri: () => NodeHelper.getMainnetURI(NetworkId.POLYGON_TESTNET),
   },
 };
 

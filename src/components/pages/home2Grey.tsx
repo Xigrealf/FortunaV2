@@ -43,9 +43,7 @@ const homeone = () => (
       </div>
       <NFTCarousel />
     </section>
-
     <Footer />
-
   </div>
 );
 export default homeone;

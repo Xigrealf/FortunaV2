@@ -14,7 +14,7 @@ import { FunctionFragment, Result, EventFragment } from "@ethersproject/abi";
 import { Listener, Provider } from "@ethersproject/providers";
 import { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from "./common";
 
-export interface FortunaLotteryInterface extends utils.Interface {
+export interface FortunaRaffleInterface extends utils.Interface {
   functions: {
     "getTickets(uint256)": FunctionFragment;
     "withdrawWinnings()": FunctionFragment;
@@ -96,7 +96,7 @@ export interface FortunaLottery extends BaseContract {
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
 
-  interface: FortunaLotteryInterface;
+  interface: FortunaRaffleInterface;
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,

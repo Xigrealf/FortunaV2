@@ -52,7 +52,7 @@ const MintBox = () => (
             <Reveal className='onStep' keyframes={fadeInUp} delay={0} duration={600} triggerOnce>
                 <div className="text-center">
                     {/* <i className="bg-color-2 i-boxed icon_wallet"></i> */}
-                    <img class="img-responsive" src="/img/USDC.png" className="img-fluid d-4" alt="#" />
+                    <img className="img-responsive" src="/img/USDC.png" className="img-fluid d-4" alt="#" />
                 </div>
             </Reveal>
             <div className="text">

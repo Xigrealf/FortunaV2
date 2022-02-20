@@ -80,11 +80,11 @@ const SliderMainParticle: React.FC = () => {
                 {/* <div className="col-lg-4 col-md-6 col-sm-4 mb30"> */}
                   <div className="de_count text-left">
                     <h5 className="id-color">Current Featured Artist</h5>
-                    <h3 className='text-warning'>JosiePops</h3>
+                    <h3 className='text-warning'>JossiePops</h3>
                   </div>
                   <div className="de_count text-left">
                     <h5 className="id-color">Current Charity</h5>
-                    <h3 className='text-primary'>OceanCleanup</h3>
+                    <h3 className='text-primary'>Ocean Cleanup</h3>
                   </div>
                 {/* </div> */}
               </div>
