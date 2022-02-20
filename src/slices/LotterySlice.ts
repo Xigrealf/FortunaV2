@@ -245,3 +245,42 @@ export const getTicketsMockTether = createAsyncThunk(
         }
     }
 );
+
+export const getRaffleInformation = createAsyncThunk(
+    "lottery/GetTicket",
+    async ({ currentAddress, amount, provider, networkID }: IGetTicketsAsyncThunk, { dispatch }) => {
+        if (!provider) {
+            dispatch(error("Please connect your wallet!"));
+        }
+        console.log(currentAddress, amount, provider, networkID);
+        // const signer = provider.getSigner();
+        const lotteryContract = Lottery__Factory.connect(addresses[networkID].LOTTERY_ADDRESS, provider.getSigner());
+        console.log("LotteryContract is ", lotteryContract);
+        let currentTicketTx;
+
+        currentTicketTx = await lotteryContract.allowance(currentAddress, lotteryContract.address)
+        // ticketTx = await lotteryContract.getTickets(amount);
+
+        try {
+            console.log("Inside Try!");
+            currentTicketTx = await lotteryContract.getTickets(amount);
+            dispatch(
+                fetchPendingTxns({
+                    txnHash: currentTicketTx.hash,
+                    text: "Approving " + amount + "Of Tickets",
+                    type: "approve_" + lotteryContract.name,
+                })
+            )
+            await currentTicketTx.wait();
+            console.log("CurrentTicketTx is : ", currentTicketTx);
+        } catch (e: unknown) {
+            console.log((e as IJsonRPCError).message)
+            dispatch(error((e as IJsonRPCError).message));
+        } finally {
+            if (currentTicketTx) {
+                dispatch(clearPendingTxn(currentTicketTx.hash));
+            }
+        }
+
+    }
+);

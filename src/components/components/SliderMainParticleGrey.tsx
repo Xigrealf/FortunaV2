@@ -83,11 +83,6 @@ const slidermainparticle = () => (
           </div>
         </Reveal>
       </div>
-      {/* <div className="col-md-6 xs-hide">
-        <Reveal className='onStep d-inline' keyframes={inline} delay={300} duration={1200} triggerOnce>
-          <img src="https://cdn.discordapp.com/attachments/939445012788314123/939446551661658142/black_logo_without_background.png" className="img-fluid" alt="" />
-        </Reveal>
-      </div> */}
     </div>
   </div>
 );

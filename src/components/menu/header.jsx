@@ -5,6 +5,8 @@ import { Link } from '@reach/router';
 import useOnclickOutside from "react-cool-onclickoutside";
 import { useWeb3Context, Web3ContextProvider } from "../../hooks/Web3Context";
 import ConnectButton from "../components/Buttons/ConnectButton";
+import FortunaIcon from "../../assets/FortunaEmblem.ico"
+import Home from "../pages/home2Grey"
 
 setDefaultBreakpoints([
   { xs: 0 },
@@ -115,11 +117,11 @@ const Header = function ({ className }) {
         <div className='row w-100-nav'>
           <div className='logo px-0'>
             <div className='navbar-title navbar-item'>
-              <NavLink to="./home2Grey">
-                <img src="/img/logo.png" className="img-fluid d-block" alt="#" />
-                <img src="/img/logo-2.png" className="img-fluid d-3" alt="#" />
-                <img src="/img/FortunaIcon2.png" className="img-fluid d-4" alt="#" />
-                <img src="/img/logo-light.png" className="img-fluid d-none" alt="#" />
+              <NavLink to="/index.html">
+                {/* <img src={logo} className="img-fluid d-block" alt="#" />
+                <img src="/img/logo-2.png" className="img-fluid d-3" alt="#" /> */}
+                <img src={FortunaIcon} className="img-fluid d-4" alt="#" />
+                {/* <img src="/img/logo-light.png" className="img-fluid d-none" alt="#" /> */}
               </NavLink>
             </div>
           </div>
@@ -145,9 +147,10 @@ const Header = function ({ className }) {
                             {/* <NavLink to="/homeGrey" onClick={() => btn_icon(!showmenu)}>Homepage Grey</NavLink>
                               <NavLink to="/" onClick={() => btn_icon(!showmenu)}>Homepage</NavLink>
                               <NavLink to="/home1" onClick={() => btn_icon(!showmenu)}>Homepage 1</NavLink> */}
-                            <NavLink to="/home1Grey" onClick={() => btn_icon(!showmenu)}>Homepage 1 Grey</NavLink>
+                              <NavLink to="/index.html" onClick={() => btn_icon(!showmenu)}>Homepage 2 Grey</NavLink>
+
+                            {/* <NavLink to="/home1Grey" onClick={() => btn_icon(!showmenu)}>Homepage 1 Grey</NavLink> */}
                             {/* <NavLink to="/home2" onClick={() => btn_icon(!showmenu)}>Homepage 2</NavLink>
-                              <NavLink to="/home2Grey" onClick={() => btn_icon(!showmenu)}>Homepage 2 Grey</NavLink>
                               <NavLink to="/home3" onClick={() => btn_icon(!showmenu)}>Homepage 3</NavLink>
                               <NavLink to="/home4" onClick={() => btn_icon(!showmenu)}>Homepage 4</NavLink>
                               <NavLink to="/home5" onClick={() => btn_icon(!showmenu)}>Homepage 5</NavLink>
