@@ -1,0 +1,33 @@
+{
+    "NFTList": [{
+            "title": "Sonic",
+            "Tier": "Common",
+            "Artist": "JosiePops",
+            "ImageLink": "http://bafybeicx6psefo754bjgpolobqkbets4uzdn4xql7rsu6ip6igmupdzcgq.ipfs.dweb.link/BatmanFortuna.gif"
+        },
+        {
+            "title": "Batman",
+            "Tier": "Uncommon",
+            "Artist": "JosiePops",
+            "ImageLink": "http://bafybeicx6psefo754bjgpolobqkbets4uzdn4xql7rsu6ip6igmupdzcgq.ipfs.dweb.link/BatmanFortuna.gif"
+        },
+        {
+            "title": "Deadpool",
+            "Tier": "Rare",
+            "Artist": "JosiePops",
+            "ImageLink": "http://bafybeicx6psefo754bjgpolobqkbets4uzdn4xql7rsu6ip6igmupdzcgq.ipfs.dweb.link/DeadpoolFortuna.gif"
+        },
+        {
+            "title": "Eminem",
+            "Tier": "Epic",
+            "Artist": "JosiePops",
+            "ImageLink": "http://bafybeicx6psefo754bjgpolobqkbets4uzdn4xql7rsu6ip6igmupdzcgq.ipfs.dweb.link/EminemlFortuna.gif"
+        },
+        {
+            "title": "TylerDurden",
+            "Tier": "Legendary",
+            "Artist": "JosiePops",
+            "ImageLink": "http://bafybeicx6psefo754bjgpolobqkbets4uzdn4xql7rsu6ip6igmupdzcgq.ipfs.dweb.link/EminemlFortuna.gif"
+        }
+    ]
+}

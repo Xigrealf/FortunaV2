@@ -1,6 +1,6 @@
 import { Contract, Signer, utils } from "ethers";
 import { Provider } from "@ethersproject/providers";
-import { FortunaLotteryInterface } from "../Other/FortunaLottery";
+import { FortunaRaffleInterface } from "../Other/FortunaRaffle";
 
 const _abi = [
     {
@@ -447,10 +447,10 @@ const _abi = [
     }
 ]
 
-export class Lottery__Factory {
+export class Raffle__Factory {
     static readonly abi = _abi;
-    static createInterface(): FortunaLotteryInterface {
-        return new utils.Interface(_abi) as FortunaLotteryInterface;
+    static createInterface(): FortunaRaffleInterface {
+        return new utils.Interface(_abi) as FortunaRaffleInterface;
     }
 
     static connect(address: string, signerOrProvider: Signer | Provider) {

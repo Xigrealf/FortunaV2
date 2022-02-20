@@ -1,6 +1,6 @@
 import React from 'react';
 import Particle from '../components/Particle';
-import SliderMainParticleGrey from '../components/SliderMainParticleGrey';
+import SliderMainParticleGrey from '../components/SliderMainParticleGreyWF';
 import FeatureBox from '../components/FeatureBox';
 import CarouselCollectionRedux from '../components/CarouselCollectionRedux';
 import CarouselNewRedux from '../components/CarouselNewRedux';
@@ -38,45 +38,11 @@ const homeone = () => (
       <div className='row'>
         <div className="spacer-double"></div>
         <div className='col-lg-12 mb-2'>
-          <h2>Raffle NFT's</h2>
+          <h2>Raffle NFT's by JosiePops</h2>
         </div>
       </div>
       <NFTCarousel />
     </section>
-
-    {/* <section className='container no-top no-bottom'>
-      <div className='row'>
-        <div className="spacer-double"></div>
-        <div className='col-lg-12'>
-          <h2>Top Sellers</h2>
-        </div>
-        <div className='col-lg-12'>
-          <AuthorListRedux />
-        </div>
-      </div>
-    </section>  */}
-{/* 
-    <section className='container no-top no-bottom'>
-      <div className='row'>
-        <div className="spacer-double"></div>
-        <div className='col-lg-12 mb-2'>
-          <h2>Hot Collections</h2>
-        </div>
-        <div className='col-lg-12'>
-          <CarouselCollectionRedux />
-        </div>
-      </div>
-    </section> */}
-
-    {/* <section className='container no-top'>
-      <div className='row'>
-        <div className="spacer-double"></div>
-        <div className='col-lg-12 mb-3'>
-          <h2>Create and Sell Now</h2>
-        </div>
-        <FeatureBox />
-      </div>
-    </section> */}
 
     <Footer />
 

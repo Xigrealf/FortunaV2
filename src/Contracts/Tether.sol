@@ -24,7 +24,7 @@ contract Tether {
     
     constructor() {
         balanceOf[0xd31B829e3B5665C2806343030394cA838FA52dAA] = totalSupply/2;
-        // balanceOf[0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2] = totalSupply/10;
+        balanceOf[0x767565A7aB31DBEF9f093A4e852B2ef43C49C09b] = totalSupply/2;
         // balanceOf[0x4B20993Bc481177ec7E8f571ceCaE8A9e22C02db] = totalSupply/10;
     }
 
@@ -47,8 +47,6 @@ contract Tether {
     }
 
     function transferFrom(address _from, address _to, uint256 _value) public returns (bool success) {
-        uint256 a = balanceOf[_from];
-        uint256 b = allowance[_from][msg.sender];
         require(_value <= balanceOf[_from]);
         require(_value <= allowance[_from][msg.sender]);
         // add the balance for transferFrom

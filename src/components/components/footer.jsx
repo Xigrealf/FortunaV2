@@ -7,9 +7,9 @@ const footer = () => (
             <div className="row">
                 <div className="col-md-3 col-sm-6 col-xs-1">
                     <div className="widget">
-                        <h5>Marketplace</h5>
+                        <h5>NFT Artists</h5>
                             <ul>
-                                <li><Link to="">All NFTs</Link></li>
+                                <li><a href="https://jossiepops.com/">JosiePops</a></li>
                                 {/* <li><Link to="">Art</Link></li>
                                 <li><Link to="">Music</Link></li>
                                 <li><Link to="">Domain Names</Link></li>
@@ -25,8 +25,8 @@ const footer = () => (
                                 {/* <li><Link to="">Help Center</Link></li>
                                 <li><Link to="">Partners</Link></li>
                                 <li><Link to="">Suggestions</Link></li> */}
-                                <li><Link to="">Discord</Link></li>
-                                <li><Link to="">Docs</Link></li>
+                                <li><a href="https://discord.gg/5CuuX4f5">Discord</a></li>
+                                <li><a href="https://daniel-breiby.gitbook.io/fortuna-protocol/">GitBook</a></li>
                                 {/* <li><Link to="">Newsletter</Link></li> */}
                             </ul>
                     </div>
@@ -35,7 +35,7 @@ const footer = () => (
                     <div className="widget">
                         <h5>Community</h5>
                         <ul>
-                            <li><Link to="">Community</Link></li>
+                            <li><a href="https://discord.gg/5CuuX4f5">Community</a></li>
                             {/* <li><Link to="">Documentation</Link></li> */}
                             {/* <li><Link to="">Brand Assets</Link></li> */}
                             {/* <li><Link to="">Blog</Link></li>
@@ -46,19 +46,10 @@ const footer = () => (
                 </div>
                 <div className="col-md-3 col-sm-6 col-xs-1">
                     <div className="widget">
-                        <h5>Newsletter</h5>
-                            <p>Signup for our newsletter to get the latest news in your inbox.</p>
-                            <form action="#" className="row form-dark" id="form_subscribe" method="post" name="form_subscribe">
-                                <div className="col text-center">
-                                    <input className="form-control" id="txt_subscribe" name="txt_subscribe" placeholder="enter your email" type="text" /> 
-                                    <Link to="" id="btn-subscribe">
-                                      <i className="arrow_right bg-color-secondary"></i>
-                                    </Link>
-                                    <div className="clearfix"></div>
-                                </div>
-                            </form>
-                            <div className="spacer-10"></div>
-                            <small>Your email is safe with us. We don't spam.</small>
+                    <h5>Charity</h5>
+                        <ul>
+                            <li><a href="https://theoceancleanup.com/">Ocean Cleanup</a></li>
+                        </ul>
                     </div>
                 </div>
             </div>
