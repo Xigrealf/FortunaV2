@@ -12,8 +12,13 @@ export interface IBaseAsyncThunk {
   readonly networkID: NetworkId;
   readonly provider: StaticJsonRpcProvider | JsonRpcProvider;
 }
+
 export interface IGetTicketsAsyncThunk extends IBaseAsyncThunk {
   readonly amount: string,
+  readonly currentAddress: string;
+}
+
+export interface IGetInformation extends IBaseAsyncThunk {
   readonly currentAddress: string;
 }
 

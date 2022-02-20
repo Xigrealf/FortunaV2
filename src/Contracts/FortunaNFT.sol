@@ -13,9 +13,11 @@ contract FortunaNFT is ERC721, ERC721URIStorage, Pausable, Ownable, ERC721Burnab
     using Counters for Counters.Counter;
 
     Counters.Counter private _tokenIdCounter;
-    address myAddress = address(this);
-    address public lotteryContractAddress = address(0x50E843FB44a6D8620E5Fc9cfA08756ef72380aA8);
-    constructor() ERC721("FortunaNFT", "Fortuna_NFT") {
+    address public contractAddress = address(0xd31B829e3B5665C2806343030394cA838FA52dAA);
+    constructor() ERC721("Fortuna Collection : Raffle - 1", "MTK") {}
+
+    function _baseURI() internal pure override returns (string memory) {
+        return "";
     }
 
     function pause() public onlyOwner {
@@ -26,8 +28,8 @@ contract FortunaNFT is ERC721, ERC721URIStorage, Pausable, Ownable, ERC721Burnab
         _unpause();
     }
 
-    function assignContractAddress(address newContractAddress) public onlyOwner{
-        lotteryContractAddress = newContractAddress;
+    function setContractAddress(address newContractAddress) public onlyOwner {
+        contractAddress = newContractAddress;
     }
 
     function safeMint(address to, string memory uri) public onlyOwner {
@@ -37,13 +39,12 @@ contract FortunaNFT is ERC721, ERC721URIStorage, Pausable, Ownable, ERC721Burnab
         _setTokenURI(tokenId, uri);
     }
 
-    function lotteryMint (address to, string memory uri) public returns(uint256) {
-        // require(msg.sender == lotteryContractAddress);
+    function raffleMint(address to, string memory uri) external returns(uint256){
+        require(msg.sender == contractAddress, "Hey You Do Not Have Authorization");
         uint256 tokenId = _tokenIdCounter.current();
         _tokenIdCounter.increment();
-        _mint(to, tokenId);
+        _safeMint(to, tokenId);
         _setTokenURI(tokenId, uri);
-
         return tokenId;
     }
 
@@ -70,3 +71,4 @@ contract FortunaNFT is ERC721, ERC721URIStorage, Pausable, Ownable, ERC721Burnab
         return super.tokenURI(tokenId);
     }
 }
+

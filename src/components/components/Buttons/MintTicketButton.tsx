@@ -5,7 +5,7 @@ import Reveal from "react-awesome-reveal";
 import { useDispatch } from "react-redux";
 import { getTickets } from "../../../helpers/TransactionHelper";
 import { useWeb3Context, Web3ContextProvider } from "../../../hooks/Web3Context";
-import { getTicketsMockTether } from "../../../slices/LotterySlice";
+import { getTicketsMockTether } from "../../../slices/RaffleSlice";
 import { keyframes } from "@emotion/react";
 
 const inline = keyframes`
