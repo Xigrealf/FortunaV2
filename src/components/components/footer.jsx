@@ -9,7 +9,7 @@ const footer = () => (
                     <div className="widget">
                         <h5>NFT Artists</h5>
                             <ul>
-                                <li><a href="https://jossiepops.com/">JosiePops</a></li>
+                                <li><a href="https://jossiepops.com/">JossiePops</a></li>
                                 {/* <li><Link to="">Art</Link></li>
                                 <li><Link to="">Music</Link></li>
                                 <li><Link to="">Domain Names</Link></li>

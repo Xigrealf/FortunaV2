@@ -228,33 +228,36 @@ export const getTicketsMockTether = createAsyncThunk(
         const gasPrice = await provider.getGasPrice();
         console.log("🚀 ~ file: RaffleSlice.ts ~ line 229 ~ gasPrice", gasPrice)
         let overrides: any = {
-            gasLimit: 300000,
+            gasLimit: 3000000,
             gasPrice: gasPrice
           };
         console.log("MockTetherContract is ", mockTetherContract);
         console.log("Allowance is ", allowance);
-        if (allowance > utils.parseEther(amount)) {
-            try {
-                console.log("Inside allowance bigger than if")
-                ticketTx = await raffleContract.getTickets(
-                    amount,
-                    overrides);
+        let a = amount +"0";
+        // console.log("🚀 ~ file: RaffleSlice.ts ~ line 258 ~ a", a)
+        // if (allowance > utils.parseEther(a)) {
+        //     try {
+        //         console.log("Inside allowance bigger than if")
+        //         ticketTx = await raffleContract.getTickets(
+        //             amount,
+        //             overrides);
                    
-                await ticketTx.wait();
-                console.log(ticketTx);
-            } catch (e: unknown) {
-                console.log((e as IJsonRPCError).message)
-                dispatch(error((e as IJsonRPCError).message));
-            } finally {
-                if (ticketTx) {
-                    dispatch(clearPendingTxn(ticketTx.hash));
-                }
-            }
-        }
-        else {
+        //         await ticketTx.wait();
+        //         console.log(ticketTx);
+        //     } catch (e: unknown) {
+        //         console.log((e as IJsonRPCError).message)
+        //         dispatch(error((e as IJsonRPCError).message));
+        //     } finally {
+        //         if (ticketTx) {
+        //             dispatch(clearPendingTxn(ticketTx.hash));
+        //         }
+        //     }
+        // }
+        // else {
             try {
-                console.log("Inside allowance less than if", utils.parseEther(amount));
-                approveTx = await mockTetherContract.approve(raffleContract.address, utils.parseEther(amount));
+                console.log("Inside allowance less than if", utils.parseEther(a));
+                
+                approveTx = await mockTetherContract.approve(raffleContract.address, utils.parseEther(a));
                 dispatch(
                     fetchPendingTxns({
                         txnHash: approveTx.hash,
@@ -295,6 +298,6 @@ export const getTicketsMockTether = createAsyncThunk(
                     }
                 }
             }
-        }
+        // }
     }
 );

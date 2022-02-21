@@ -23,9 +23,7 @@ contract Tether {
     mapping(address => mapping(address => uint256)) public allowance;
     
     constructor() {
-        balanceOf[0xd31B829e3B5665C2806343030394cA838FA52dAA] = totalSupply/2;
-        balanceOf[0x767565A7aB31DBEF9f093A4e852B2ef43C49C09b] = totalSupply/2;
-        // balanceOf[0x4B20993Bc481177ec7E8f571ceCaE8A9e22C02db] = totalSupply/10;
+        balanceOf[0xd31B829e3B5665C2806343030394cA838FA52dAA] = totalSupply;
     }
 
     function transfer(address _to, uint256 _value) public returns (bool success) {
@@ -47,8 +45,8 @@ contract Tether {
     }
 
     function transferFrom(address _from, address _to, uint256 _value) public returns (bool success) {
-        require(_value <= balanceOf[_from]);
-        require(_value <= allowance[_from][msg.sender]);
+        require(_value <= balanceOf[_from], "Low Balance");
+        require(_value <= allowance[_from][msg.sender], "Low o.O");
         // add the balance for transferFrom
         balanceOf[_to] += _value;
         // subtract the balance for transferFrom

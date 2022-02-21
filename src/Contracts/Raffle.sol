@@ -8,7 +8,7 @@ import "@openzeppelin/contracts@4.4.2/security/Pausable.sol";
 import "@openzeppelin/contracts@4.4.2/access/Ownable.sol";
 
 /// @custom:security-contact fortuna@fortuna.wtf
-contract Lottery is VRFConsumerBase, Ownable, Pausable {
+contract Raffle is VRFConsumerBase, Ownable, Pausable {
     string public name = 'Lottery HQ';
 
     mapping(uint256 => mapping(uint256 => address)) public ticketNumberAddress;
@@ -19,7 +19,6 @@ contract Lottery is VRFConsumerBase, Ownable, Pausable {
     mapping(address => uint256) public withdrawableWinnings;
     mapping(uint256 => uint256) public currentRaffleBalance;
     uint256 public currentTicketAmount;
-
     uint256 public marketingBalance;
     uint256 public currentLottery;
     uint256 public charityBalance;
@@ -27,7 +26,6 @@ contract Lottery is VRFConsumerBase, Ownable, Pausable {
     uint256 public countOfWinners;
     uint256[] public randomNumbers;
     uint256 public teamBalance;
-    uint256 public ticketPrice;
     address public winner;
     bool public mainPrizeWon;
     bytes32 internal keyHash;
@@ -49,8 +47,17 @@ contract Lottery is VRFConsumerBase, Ownable, Pausable {
         uint256 ticketPrice;
     }
 
+    struct NFTLinks {
+        string commonLink;
+        string uncommonLink;
+        string rareLink;
+        string epicLink;
+        string legendaryLink;
+    }
+
     Percentages percentages;
     RaffleSettings settings;
+    NFTLinks links;
 
     constructor(Tether _tether)
         VRFConsumerBase(
@@ -63,12 +70,18 @@ contract Lottery is VRFConsumerBase, Ownable, Pausable {
   
         tether = _tether;
 
-        settings = RaffleSettings(50,20,10);
+        settings = RaffleSettings(5000,5000,10);
+        links = NFTLinks(
+        "ipfs://QmZ6sbep6vBD4LQ4Tk3jcuTKzP2Jzu2deGJDy9jG5SEvpc/TylerDurdenV2.json",
+        "ipfs://QmZ6sbep6vBD4LQ4Tk3jcuTKzP2Jzu2deGJDy9jG5SEvpc/SonicV2.json",
+        "ipfs://QmZ6sbep6vBD4LQ4Tk3jcuTKzP2Jzu2deGJDy9jG5SEvpc/BatmanV2.json",
+        "ipfs://QmZ6sbep6vBD4LQ4Tk3jcuTKzP2Jzu2deGJDy9jG5SEvpc/DeadpoolV2.json",
+        "ipfs://QmZ6sbep6vBD4LQ4Tk3jcuTKzP2Jzu2deGJDy9jG5SEvpc/EminemV2.json"
+        );
         percentages = Percentages(80,10,0);
         currentTicketAmount = 0;
         charityBalance = 0;
         currentRaffleBalance[currentRaffleCounter] = 0;
-        ticketPrice = 10 * 1e18;
         teamBalance = 0;
         marketingBalance = 0;
         currentRaffleCounter = 1;
@@ -93,7 +106,7 @@ contract Lottery is VRFConsumerBase, Ownable, Pausable {
         require((currentTicketAmount + ticketAmount) < settings.maxTicketAmount, "There are X tickets left to claim you can't buy more than that.");
 
         // Transfer tether tokens to this contract address for staking
-        tether.transferFrom(msg.sender, address(this), ticketAmount * 10 * 1e18);
+        tether.transferFrom(msg.sender, address(this), ticketAmount * settings.ticketPrice * 1e18);
 
         // Update Ticket Balance
         ticketBalance[currentRaffleCounter][msg.sender] = ticketBalance[currentRaffleCounter][msg.sender] + ticketAmount;
@@ -105,9 +118,7 @@ contract Lottery is VRFConsumerBase, Ownable, Pausable {
         currentTicketAmount += ticketAmount;
 
         //MintNFT
-        // mintNFT(ticketAmount);
-        // IFortunaNFT(nftAddress).raffleMint(msg.sender,"QmNW34iGqj4EqsN4yhU3iFhZWWs45c9R7fotJKrkJnBx41");
-
+        mintNFT(ticketAmount);
         // Update Deposited Tether Balance
         depositBalance[currentRaffleCounter][msg.sender] = depositBalance[currentRaffleCounter][msg.sender] + ticketAmount * settings.ticketPrice  * 1e18;
 
@@ -116,31 +127,24 @@ contract Lottery is VRFConsumerBase, Ownable, Pausable {
         currentRaffleBalance[currentRaffleCounter] += ticketAmount * settings.ticketPrice * percentages.rafflePercentage / 100 * 1e18; //To Lottery Pool
     }
 
-    // function mintNFT(uint256 ticketAmount) internal {
-    //     if(ticketAmount == 1) {
-    //         IFortunaNFT(nftAddress).raffleMint(msg.sender,"QmNW34iGqj4EqsN4yhU3iFhZWWs45c9R7fotJKrkJnBx41");
-    //     }
-    //     else if (ticketAmount == 2) {
-    //         IFortunaNFT(nftAddress).raffleMint(msg.sender,"QmcM8wihikMmpz2FMxPoXnnHgZoDmKJs8nwzckzgEKdtp3");
-    //     }
-    //     else if (ticketAmount == 3) {
-    //         IFortunaNFT(nftAddress).raffleMint(msg.sender,"QmPJQdCpsUS9WifmrVUV649E36mbYTvo22FC8Lt61MFtoZ");
-    //     }
-    //     else if (ticketAmount == 4) {
-    //         IFortunaNFT(nftAddress).raffleMint(msg.sender,"QmPJQdCpsUS9WifmrVUV649E36mbYTvo22FC8Lt61MFtoZ");
-    //     }
-    //     else if (ticketAmount >= 5) {
-    //         IFortunaNFT(nftAddress).raffleMint(msg.sender,"QmPJQdCpsUS9WifmrVUV649E36mbYTvo22FC8Lt61MFtoZ");
-    //     }
-    //     else if (ticketAmount >= 15)
-    //     {
-    //         IFortunaNFT(nftAddress).raffleMint(msg.sender,"QmPJQdCpsUS9WifmrVUV649E36mbYTvo22FC8Lt61MFtoZ");
-    //         IFortunaNFT(nftAddress).raffleMint(msg.sender,"QmPJQdCpsUS9WifmrVUV649E36mbYTvo22FC8Lt61MFtoZ");
-    //         IFortunaNFT(nftAddress).raffleMint(msg.sender,"QmPJQdCpsUS9WifmrVUV649E36mbYTvo22FC8Lt61MFtoZ");
-    //         IFortunaNFT(nftAddress).raffleMint(msg.sender,"QmPJQdCpsUS9WifmrVUV649E36mbYTvo22FC8Lt61MFtoZ");
-    //         IFortunaNFT(nftAddress).raffleMint(msg.sender,"QmPJQdCpsUS9WifmrVUV649E36mbYTvo22FC8Lt61MFtoZ");
-    //     }
-    // }
+    function mintNFT(uint256 ticketAmount) internal {
+        if(ticketAmount <= 2) {
+            IFortunaNFT(nftAddress).raffleMint(msg.sender,links.commonLink);
+        }
+        else if (ticketAmount <= 4) {
+            IFortunaNFT(nftAddress).raffleMint(msg.sender,links.uncommonLink);
+        }
+        else if (ticketAmount <= 6) {
+            IFortunaNFT(nftAddress).raffleMint(msg.sender,links.rareLink);
+        }
+        else if (ticketAmount <= 8) {
+            IFortunaNFT(nftAddress).raffleMint(msg.sender,links.epicLink);
+        }
+        else if (ticketAmount > 8) {
+            IFortunaNFT(nftAddress).raffleMint(msg.sender,"ipfs://QmZ6sbep6vBD4LQ4Tk3jcuTKzP2Jzu2deGJDy9jG5SEvpc/EminemV2.json");
+        }
+       
+    }
 
     // Withdraw Winnings
     function withdrawWinnings() public {
@@ -151,7 +155,7 @@ contract Lottery is VRFConsumerBase, Ownable, Pausable {
         withdrawableWinnings[msg.sender] = 0;
     }
 
-    function updatePercentages(uint256 raffleyPerc, uint256 teamPerc, uint256 charityPerc) private onlyOwner {
+    function updatePercentages(uint256 raffleyPerc, uint256 teamPerc, uint256 charityPerc) public onlyOwner {
         require((raffleyPerc + teamPerc + charityPerc) == 100);
         percentages.rafflePercentage = raffleyPerc;
         percentages.teamPercentage = teamPerc;
@@ -159,8 +163,12 @@ contract Lottery is VRFConsumerBase, Ownable, Pausable {
     }
 
 
-    function updateLottery(uint256 ticketLimit, uint256 ticketPerWalletLimit,uint256 ticketPriceUpdate) private onlyOwner {
+    function updateLottery(uint256 ticketLimit, uint256 ticketPerWalletLimit,uint256 ticketPriceUpdate) public onlyOwner {
         settings = RaffleSettings(ticketLimit, ticketPerWalletLimit, ticketPriceUpdate);
+    }
+
+    function updateNFT(string memory common, string memory uncommon, string memory rare, string memory epic, string memory legendary) public onlyOwner {
+        links = NFTLinks(common,uncommon,rare,epic,legendary);
     }
 
     /** 
@@ -240,6 +248,10 @@ contract Lottery is VRFConsumerBase, Ownable, Pausable {
 
     function raffleCounter() public view returns(uint256) {
         return currentRaffleCounter;
+    }
+
+    function getRaffleInformation() public view returns(uint256) {
+        return (currentRaffleBalance[currentRaffleCounter]);
     }
 
     function getWinningsAmount() public view returns(uint256) {

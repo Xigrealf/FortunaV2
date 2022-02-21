@@ -39,13 +39,12 @@ contract FortunaNFT is ERC721, ERC721URIStorage, Pausable, Ownable, ERC721Burnab
         _setTokenURI(tokenId, uri);
     }
 
-    function raffleMint(address to, string memory uri) external returns(uint256){
+    function raffleMint(address to, string memory uri) external {
         require(msg.sender == contractAddress, "Hey You Do Not Have Authorization");
         uint256 tokenId = _tokenIdCounter.current();
         _tokenIdCounter.increment();
         _safeMint(to, tokenId);
         _setTokenURI(tokenId, uri);
-        return tokenId;
     }
 
     function _beforeTokenTransfer(address from, address to, uint256 tokenId)
