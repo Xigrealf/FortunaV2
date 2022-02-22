@@ -3,6 +3,7 @@ import Reveal from 'react-awesome-reveal';
 import { keyframes } from "@emotion/react";
 import MintTicketButton from './Buttons/MintTicketButton';
 import styled from "styled-components";
+import RaffleInformation from './RaffleInformation';
 
 const fadeInUp = keyframes`
   0% {
@@ -62,6 +63,14 @@ const MintBox = () => (
             </div>
             <i className="wm icon_wallet"></i>
         </div>
+        {/* <div className="feature-box f-boxed style-3">
+            <div className="text">
+                <div className="text-center">
+                    <RaffleInformation />
+                </div>
+            </div>
+            <i className="wm icon_cloud-upload_alt"></i>
+        </div> */}
     </div >
 );
 export default MintBox;

@@ -13,6 +13,14 @@ import { MockTether__Factory } from "../Generator/Contracts/MockTetherFactory";
 import { error, info } from "./MessagesSlice";
 import { clearPendingTxn, fetchPendingTxns } from "./PendingTxnsSlice";
 
+export interface IRaffleDetails {
+    readonly winnings: number;
+    readonly prizePool: number;
+    readonly ticketsLeft: number;
+    readonly ticketsOwned: number;
+    readonly raffleCounter: number;
+}
+
 export type transactionInformation = {
     success: boolean,
     message: string,
@@ -101,6 +109,64 @@ export const getTicketsUSDC = createAsyncThunk(
     }
 );
 
+export const getRaffleInformation = createAsyncThunk(
+    "raffle/getRaffleInformation",
+    async ({ currentAddress, provider, networkID }: IGetInformation, { dispatch }) : Promise<IRaffleDetails> => {
+        let ticketsLeft = 0,
+            raffleCounter = 0,
+            winnings = 0,
+            prizePool = 0,
+            ticketsOwned = 0;
+        try {
+            try {
+                const ticketsResult = await dispatch(getTicketsLeft({ currentAddress, provider, networkID }),
+                ).unwrap();
+                ticketsLeft = Number(ticketsResult.toString());
+            }
+            catch {
+                console.error("Returned a null response from dispatch(getTicketsLeft)");
+            }
+            try {
+                const winningsResult = await dispatch(getWinnings({ currentAddress, provider, networkID }),
+                ).unwrap();
+                winnings = Number(winningsResult.toString());
+            }
+            catch {
+                console.error("Returned a null response from dispatch(getWinnings)");
+            }
+            try {
+                const counterResult = await dispatch(getRaffleCounter({ currentAddress, provider, networkID }),
+                ).unwrap();
+                raffleCounter = Number(counterResult.toString());
+            }
+            catch {
+                console.error("Returned a null response from dispatch(counterResult)");
+            }
+            try {
+                const currentBalanceResult = await dispatch(getCurrentRaffleBalance({ currentAddress, provider, networkID }),
+                ).unwrap();
+                prizePool = Number(currentBalanceResult.toString());
+            }
+            catch {
+                console.error("Returned a null response from dispatch(getCurrentRaffleBalance)");
+            }
+            try {
+                // const currentBalanceResult = await dispatch(getCurrentRaffleBalance({ currentAddress, provider, networkID }),
+                // ).unwrap();
+                // prizePool = Number(currentBalanceResult.toString());
+            }
+            catch {
+                // console.error("Returned a null response from dispatch(getCurrentRaffleBalance)");
+            }
+        }
+        catch {
+            console.error("Something Went Wrong In getRaffleInformation");
+        }
+        finally {
+            return ({ticketsLeft, raffleCounter, winnings, prizePool, ticketsOwned})
+        }
+    });
+
 export const getTicketsLeft = createAsyncThunk(
     "raffle/GetTicketsLeft",
     async ({ currentAddress, provider, networkID }: IGetInformation, { dispatch }) => {
@@ -108,7 +174,6 @@ export const getTicketsLeft = createAsyncThunk(
             dispatch(error("Please connect your wallet!"));
         }
         console.log(currentAddress, provider, networkID);
-        // const signer = provider.getSigner();
         const raffleContract = Raffle__Factory.connect(addresses[networkID].RAFFLE_ADDRESS, provider.getSigner());
         console.log("RaffleContract is ", raffleContract);
         let ticketTx;
@@ -123,6 +188,7 @@ export const getTicketsLeft = createAsyncThunk(
         } finally {
             if (ticketTx) {
                 dispatch(clearPendingTxn(ticketTx.hash));
+                return ticketTx;
             }
         }
     }
@@ -150,6 +216,7 @@ export const getWinnings = createAsyncThunk(
         } finally {
             if (winningsTx) {
                 dispatch(clearPendingTxn(winningsTx.hash));
+                return winningsTx;
             }
         }
     }
@@ -211,6 +278,8 @@ export const getCurrentRaffleBalance = createAsyncThunk(
     }
 );
 
+//GetCurrentTickets
+
 export const getTicketsMockTether = createAsyncThunk(
     "lottery/GetTicket",
     async ({ currentAddress, amount, provider, networkID }: IGetTicketsAsyncThunk, { dispatch }) => {
@@ -230,10 +299,10 @@ export const getTicketsMockTether = createAsyncThunk(
         let overrides: any = {
             gasLimit: 3000000,
             gasPrice: gasPrice
-          };
+        };
         console.log("MockTetherContract is ", mockTetherContract);
         console.log("Allowance is ", allowance);
-        let a = amount +"0";
+        let a = amount + "0";
         // console.log("🚀 ~ file: RaffleSlice.ts ~ line 258 ~ a", a)
         // if (allowance > utils.parseEther(a)) {
         //     try {
@@ -241,7 +310,7 @@ export const getTicketsMockTether = createAsyncThunk(
         //         ticketTx = await raffleContract.getTickets(
         //             amount,
         //             overrides);
-                   
+
         //         await ticketTx.wait();
         //         console.log(ticketTx);
         //     } catch (e: unknown) {
@@ -254,50 +323,50 @@ export const getTicketsMockTether = createAsyncThunk(
         //     }
         // }
         // else {
-            try {
-                console.log("Inside allowance less than if", utils.parseEther(a));
-                
-                approveTx = await mockTetherContract.approve(raffleContract.address, utils.parseEther(a));
-                dispatch(
-                    fetchPendingTxns({
-                        txnHash: approveTx.hash,
-                        text: "Approving " + amount + "Of Tickets",
-                        type: "approve_" + mockTetherContract.name,
-                    })
-                )
-                await approveTx.wait();
-                console.log("ApproveTx is : ", approveTx);
-            } catch (e: unknown) {
-                console.log((e as IJsonRPCError).message)
-                dispatch(error((e as IJsonRPCError).message));
-            } finally {
-                if (approveTx) {
-                    dispatch(clearPendingTxn(approveTx.hash));
-                    console.log("Transaction Approved!");
-                    try {
-                        console.log("Inside 2nd Try!");
-                        ticketTx = await raffleContract.getTickets(
-                            amount,
-                            overrides);
-                        dispatch(
-                            fetchPendingTxns({
-                                txnHash: ticketTx.hash,
-                                text: "Approving " + amount + "Of Tickets",
-                                type: "approve_" + raffleContract.name,
-                            })
-                        )
-                        await ticketTx.wait();
-                        console.log("TicketTx is : ", ticketTx);
-                    } catch (e: unknown) {
-                        console.log((e as IJsonRPCError).message)
-                        dispatch(error((e as IJsonRPCError).message));
-                    } finally {
-                        if (ticketTx) {
-                            dispatch(clearPendingTxn(approveTx.hash));
-                        }
+        try {
+            console.log("Inside allowance less than if", utils.parseEther(a));
+
+            approveTx = await mockTetherContract.approve(raffleContract.address, utils.parseEther(a));
+            dispatch(
+                fetchPendingTxns({
+                    txnHash: approveTx.hash,
+                    text: "Approving " + amount + "Of Tickets",
+                    type: "approve_" + mockTetherContract.name,
+                })
+            )
+            await approveTx.wait();
+            console.log("ApproveTx is : ", approveTx);
+        } catch (e: unknown) {
+            console.log((e as IJsonRPCError).message)
+            dispatch(error((e as IJsonRPCError).message));
+        } finally {
+            if (approveTx) {
+                dispatch(clearPendingTxn(approveTx.hash));
+                console.log("Transaction Approved!");
+                try {
+                    console.log("Inside 2nd Try!");
+                    ticketTx = await raffleContract.getTickets(
+                        amount,
+                        overrides);
+                    dispatch(
+                        fetchPendingTxns({
+                            txnHash: ticketTx.hash,
+                            text: "Approving " + amount + "Of Tickets",
+                            type: "approve_" + raffleContract.name,
+                        })
+                    )
+                    await ticketTx.wait();
+                    console.log("TicketTx is : ", ticketTx);
+                } catch (e: unknown) {
+                    console.log((e as IJsonRPCError).message)
+                    dispatch(error((e as IJsonRPCError).message));
+                } finally {
+                    if (ticketTx) {
+                        dispatch(clearPendingTxn(approveTx.hash));
                     }
                 }
             }
+        }
         // }
     }
 );

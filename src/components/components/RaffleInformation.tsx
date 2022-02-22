@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Reveal from "react-awesome-reveal";
 import { useDispatch } from "react-redux";
-import { useWeb3Context, Web3ContextProvider } from "../../../hooks/Web3Context";
-import { getTicketsMockTether } from "../../../slices/RaffleSlice";
+import { getTickets } from "../../helpers/TransactionHelper";
+import { useWeb3Context, Web3ContextProvider } from "../../hooks/Web3Context";
+import { getRaffleInformation, IRaffleDetails } from "../../slices/RaffleSlice";
 import { keyframes } from "@emotion/react";
 
 const inline = keyframes`
@@ -29,35 +30,30 @@ const fadeInUp = keyframes`
     transform: translateY(0);
   }
 `;
-const MintTicketButton: React.FC = () => {
+
+
+const RaffleInformation: React.FC = () => {
     const dispatch = useDispatch();
     const { connect, provider, address, networkId } = useWeb3Context();
     const [mintAmount, setMintAmount] = useState(0);
+    let information;
     const GetTicket = async () => {
         console.log("In Dispatch Function!");
-        await dispatch(getTicketsMockTether({ currentAddress: address, amount: mintAmount.toString(), provider, networkID: networkId }));
+        information = await dispatch(getRaffleInformation({ currentAddress: address, provider, networkID: networkId }));
     }
 
     return (
         <div>
             {!address
-                ? (<div>
-                    <Reveal className='onStep' keyframes={fadeInUp} delay={100} duration={600} triggerOnce>
-                        <h4 className="text-center">Please Connect Your Web3 Wallet</h4>
-                    </Reveal>
-                    <Reveal className='onStep' keyframes={fadeInUp} delay={200} duration={600} triggerOnce>
-                        <p className="">In order to participate in the raffle you need to connect your web3 wallet first.</p>
-                    </Reveal>
-                    <Reveal className='onStep d-inline' keyframes={fadeInUp} delay={800} duration={900} triggerOnce>
-                        <span onClick={connect} className="btn-main inline lead"> Please Connect Your Wallet In Order To Mint! </span>
-                        <div className="mb-sm-30"></div>
-                    </Reveal>
+                ? (
+                <div>
+                    
                 </div>
                 )
                 : (
                     <div className="row text-center">
                         <Reveal className='onStep' keyframes={fadeInUp} delay={100} duration={600} triggerOnce>
-                            <h4 className="text-center">Mint Your Tickets Here!</h4>
+                            <h4 className="text-left">Tickets Left: {information.ticketsLeft}</h4>
                         </Reveal>
                         <Reveal className='onStep' keyframes={fadeInUp} delay={200} duration={600} triggerOnce>
                             <p className="">Please Enter Your Desired Amount Of Tickets</p>
@@ -72,10 +68,7 @@ const MintTicketButton: React.FC = () => {
                                 </div>
                             </div>
                         </Reveal>
-                        <Reveal className='onStep d-inline' keyframes={fadeInUp} delay={800} duration={900} triggerOnce>
-                            <span onClick={GetTicket} className="btn-main inline lead">Get Tickets</span>
-                            <div className="mb-sm-30"></div>
-                        </Reveal>
+                       
                     </div>
                 )
             }
@@ -83,4 +76,4 @@ const MintTicketButton: React.FC = () => {
     );
 };
 
-export default MintTicketButton;
+export default RaffleInformation;

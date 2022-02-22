@@ -64,6 +64,10 @@ const slidermainparticle = () => (
                   <h3><span>2381$</span></h3>
                   <h5 className="id-color">Charity Balance</h5>
                 </div>
+                <div className="de_count text-right">
+                  <h3><span>2381$</span></h3>
+                  <h5 className="id-color">Charity Balance</h5>
+                </div>
               </div>
 
               <div className="col-lg-4 col-md-6 col-sm-4 mb30">
