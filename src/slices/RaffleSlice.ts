@@ -162,9 +162,13 @@ export const getRaffleInformation = createAsyncThunk(
         catch {
             console.error("Something Went Wrong In getRaffleInformation");
         }
-        finally {
-            return ({ticketsLeft, raffleCounter, winnings, prizePool, ticketsOwned})
-        }
+            return ({
+                winnings: winnings, 
+                prizePool: prizePool, 
+                ticketsLeft: ticketsLeft,
+                ticketsOwned: ticketsOwned,
+                raffleCounter: raffleCounter
+            })
     });
 
 export const getTicketsLeft = createAsyncThunk(

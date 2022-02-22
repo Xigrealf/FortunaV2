@@ -32,31 +32,34 @@ const fadeInUp = keyframes`
 `;
 
 
+
 const RaffleInformation: React.FC = () => {
     const dispatch = useDispatch();
     const { connect, provider, address, networkId } = useWeb3Context();
+    const [raffleInformation, setRaffleInformation] = useState<IRaffleDetails>({ winnings: 0, raffleCounter: 0, ticketsLeft: 0, ticketsOwned: 0, prizePool: 0 });
     const [mintAmount, setMintAmount] = useState(0);
-    let information;
-    const GetTicket = async () => {
-        console.log("In Dispatch Function!");
-        information = await dispatch(getRaffleInformation({ currentAddress: address, provider, networkID: networkId }));
-    }
+    useEffect(() => {
+        console.log("In Dispatch GetRaffleInformation Function!");
+        dispatch(getRaffleInformation({ currentAddress: address, provider, networkID: networkId }));
+    }, [raffleInformation]);
 
     return (
         <div>
             {!address
                 ? (
-                <div>
-                    
-                </div>
+                    <div>
+
+                    </div>
                 )
                 : (
-                    <div className="row text-center">
-                        <Reveal className='onStep' keyframes={fadeInUp} delay={100} duration={600} triggerOnce>
-                            <h4 className="text-left">Tickets Left: {information.ticketsLeft}</h4>
-                        </Reveal>
+                    <div className="row">
+                        <div>
+                            <Reveal className='onStep' keyframes={fadeInUp} delay={100} duration={600} triggerOnce>
+                                <h4 className="text-left">Tickets Left: {raffleInformation.ticketsLeft}</h4>
+                            </Reveal>
+                        </div>
                         <Reveal className='onStep' keyframes={fadeInUp} delay={200} duration={600} triggerOnce>
-                            <p className="">Please Enter Your Desired Amount Of Tickets</p>
+                            <p className="">Tickets Owned: {raffleInformation.ticketsOwned}</p>
                         </Reveal>
                         <Reveal className='onStep w-100' keyframes={fadeInUp} delay={200} duration={600} triggerOnce>
                             <div className="row justify-content-center align-item-center h-100">
@@ -68,7 +71,7 @@ const RaffleInformation: React.FC = () => {
                                 </div>
                             </div>
                         </Reveal>
-                       
+
                     </div>
                 )
             }
