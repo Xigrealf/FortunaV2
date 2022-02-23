@@ -158,12 +158,12 @@ export const getRaffleInformation = createAsyncThunk(
                 console.error("Returned a null response from dispatch(getCurrentRaffleBalance)");
             }
             try {
-                // const currentBalanceResult = await dispatch(getCurrentRaffleBalance({ currentAddress, provider, networkID }),
-                // ).unwrap();
-                // prizePool = Number(currentBalanceResult.toString());
+                const currentBalanceResult = await dispatch(getCurrentTickets({ currentAddress, provider, networkID }),
+                ).unwrap();
+                ticketsOwned = Number(currentBalanceResult.toString());
             }
             catch {
-                // console.error("Returned a null response from dispatch(getCurrentRaffleBalance)");
+                console.error("Returned a null response from dispatch(getCurrentTickets)");
             }
         }
         catch {
@@ -219,7 +219,6 @@ export const getWinnings = createAsyncThunk(
 
         try {
             winningsTx = await raffleContract.getWinningsAmount();
-            await winningsTx.wait();
             console.log(winningsTx);
         } catch (e: unknown) {
             console.log((e as IJsonRPCError).message)
@@ -247,7 +246,6 @@ export const getRaffleCounter = createAsyncThunk(
 
         try {
             counterTx = await raffleContract.getRaffleCounter();
-            await counterTx.wait();
             console.log(counterTx);
         } catch (e: unknown) {
             console.log((e as IJsonRPCError).message)
@@ -275,7 +273,6 @@ export const getCurrentRaffleBalance = createAsyncThunk(
 
         try {
             balanceTx = await raffleContract.getCurrentRaffleBalance();
-            await balanceTx.wait();
             console.log(balanceTx);
         } catch (e: unknown) {
             console.log((e as IJsonRPCError).message)
@@ -290,6 +287,32 @@ export const getCurrentRaffleBalance = createAsyncThunk(
 );
 
 //GetCurrentTickets
+export const getCurrentTickets = createAsyncThunk(
+    "raffle/GetCurrentRaffleBalance",
+    async ({ currentAddress, provider, networkID }: IGetInformation, { dispatch }) => {
+        if (!provider) {
+            dispatch(error("Please connect your wallet!"));
+        }
+        console.log(currentAddress, provider, networkID);
+        // const signer = provider.getSigner();
+        const raffleContract = Raffle__Factory.connect(addresses[networkID].RAFFLE_ADDRESS, provider.getSigner());
+        console.log("RaffleContract is ", raffleContract);
+        let ticketTx;
+
+        try {
+            ticketTx = await raffleContract.getCurrentTickets();
+            console.log(ticketTx);
+        } catch (e: unknown) {
+            console.log((e as IJsonRPCError).message)
+            dispatch(error((e as IJsonRPCError).message));
+        } finally {
+            if (ticketTx) {
+                dispatch(clearPendingTxn(ticketTx.hash));
+                return ticketTx;
+            }
+        }
+    }
+);
 
 export const getTicketsMockTether = createAsyncThunk(
     "lottery/GetTicket",
