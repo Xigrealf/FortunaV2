@@ -3,7 +3,7 @@ import Reveal from "react-awesome-reveal";
 import { useDispatch } from "react-redux";
 import { getTickets } from "../../helpers/TransactionHelper";
 import { useWeb3Context, Web3ContextProvider } from "../../hooks/Web3Context";
-import { getRaffleInformation, RaffleDetails } from "../../slices/RaffleSlice";
+import { claimWinnings, getRaffleInformation, RaffleDetails } from "../../slices/RaffleSlice";
 import { keyframes } from "@emotion/react";
 
 const inline = keyframes`
@@ -37,23 +37,24 @@ const RaffleInformation: React.FC = () => {
     const dispatch = useDispatch();
     const { connect, provider, address, networkId } = useWeb3Context();
     const [raffleInformation, setRaffleInformation] = useState<RaffleDetails>({ winnings: 0, raffleCounter: 0, ticketsLeft: 0, ticketsOwned: 0, prizePool: 0 });
-    const [mintAmount, setMintAmount] = useState(0);
     useEffect(() => {
-        if (!address) {
+        if (!address && networkId == 80001) {
             console.log("In Dispatch GetRaffleInformation Function!");
             setRaffleInformation(dispatch<any>(getRaffleInformation({ currentAddress: address, provider, networkID: networkId })));
         }
-    }, [raffleInformation]);
-
+    });
+    const ClaimWinnings = async () => {
+        console.log("In Dispatch Function!");
+        await dispatch(claimWinnings({ currentAddress: address, provider, networkID: networkId }));
+    }
     return (
-        <div>
+        <div className="spacer-double">
             {!address
                 ? (
-                    <div>
-
-                    </div>
+                    <div className="spacer-double"></div>
                 )
                 : (
+                    <div>
                     <div className="row">
                         <div>
                             <Reveal className='onStep' keyframes={fadeInUp} delay={100} duration={600} triggerOnce>
@@ -66,14 +67,18 @@ const RaffleInformation: React.FC = () => {
                         <Reveal className='onStep w-100' keyframes={fadeInUp} delay={200} duration={600} triggerOnce>
                             <div className="row justify-content-center align-item-center h-100">
                                 <div className="col col-md-6 col-lg-4 col-xl-3">
-                                    <div></div>
-                                    <form action="#" className="row form-dark" id="form_subscribe" method="post" name="form_subscribe">
-                                        <input className="form-control text-center" onChange={(e) => setMintAmount(e.target.valueAsNumber)} placeholder="    Desired Amount Of Tickets" type="number" />
-                                    </form>
+                                    <div>
+                                    </div>
                                 </div>
                             </div>
                         </Reveal>
-
+                    </div>
+                    <div className="row">
+                        <Reveal className='onStep d-inline' keyframes={fadeInUp} delay={800} duration={900} triggerOnce>
+                            <span onClick={ClaimWinnings} className="btn-main inline lead">Claim Winnings</span>
+                            <div className="mb-sm-30"></div>
+                        </Reveal>
+                        </div>
                     </div>
                 )
             }

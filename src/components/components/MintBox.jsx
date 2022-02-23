@@ -63,14 +63,27 @@ const MintBox = () => (
             </div>
             <i className="wm icon_wallet"></i>
         </div>
-        <div className="feature-box f-boxed style-3">
-            <div className="text">
-                <div className="text-center">
-                    <RaffleInformation />
+        <div className="spacer-single"></div>
+        <div className="col-lg-6 col-md-6 mb-3">
+            <div className="feature-box f-boxed style-3">
+                <div className="text">
+                    <div className="text-center">
+                        <RaffleInformation />
+                    </div>
                 </div>
+                <i className="wm icon_cloud-upload_alt"></i>
             </div>
-            <i className="wm icon_cloud-upload_alt"></i>
         </div>
-    </div >
+        <div className="col-lg-6 col-md-6 mb-3">
+            <div className="feature-box f-boxed style-3">
+                <div className="text">
+                    <div className="text-center">
+                        <RaffleInformation />
+                    </div>
+                </div>
+                <i className="wm icon_cloud-upload_alt"></i>
+            </div>
+        </div >
+    </div>
 );
 export default MintBox;

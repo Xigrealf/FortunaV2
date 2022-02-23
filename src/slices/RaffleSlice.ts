@@ -111,7 +111,7 @@ export const getTicketsUSDC = createAsyncThunk(
 
 export const getRaffleInformation = createAsyncThunk(
     "raffle/getRaffleInformation",
-    async ({ currentAddress, provider, networkID }: IGetInformation, { dispatch }) : Promise<RaffleDetails> => {
+    async ({ currentAddress, provider, networkID }: IGetInformation, { dispatch }): Promise<RaffleDetails> => {
         let ticketsLeft = 0,
             raffleCounter = 0,
             winnings = 0,
@@ -169,13 +169,13 @@ export const getRaffleInformation = createAsyncThunk(
         catch {
             console.error("Something Went Wrong In getRaffleInformation");
         }
-            return ({
-                winnings: winnings, 
-                prizePool: prizePool, 
-                ticketsLeft: ticketsLeft,
-                ticketsOwned: ticketsOwned,
-                raffleCounter: raffleCounter
-            })
+        return ({
+            winnings: winnings,
+            prizePool: prizePool,
+            ticketsLeft: ticketsLeft,
+            ticketsOwned: ticketsOwned,
+            raffleCounter: raffleCounter
+        })
     });
 
 export const getTicketsLeft = createAsyncThunk(
@@ -184,7 +184,8 @@ export const getTicketsLeft = createAsyncThunk(
         if (!provider) {
             dispatch(error("Please connect your wallet!"));
         }
-        console.log(currentAddress, provider, networkID);
+        console.log("Information", currentAddress, provider, networkID);
+
         const raffleContract = Raffle__Factory.connect(addresses[networkID].RAFFLE_ADDRESS, provider.getSigner());
         console.log("RaffleContract is ", raffleContract);
         let ticketTx;
@@ -211,8 +212,8 @@ export const getWinnings = createAsyncThunk(
         if (!provider) {
             dispatch(error("Please connect your wallet!"));
         }
-        console.log(currentAddress, provider, networkID);
-        // const signer = provider.getSigner();
+        console.log("Information", currentAddress, provider, networkID);
+
         const raffleContract = Raffle__Factory.connect(addresses[networkID].RAFFLE_ADDRESS, provider.getSigner());
         console.log("RaffleContract is ", raffleContract);
         let winningsTx;
@@ -238,8 +239,8 @@ export const getRaffleCounter = createAsyncThunk(
         if (!provider) {
             dispatch(error("Please connect your wallet!"));
         }
-        console.log(currentAddress, provider, networkID);
-        // const signer = provider.getSigner();
+        console.log("Information", currentAddress, provider, networkID);
+
         const raffleContract = Raffle__Factory.connect(addresses[networkID].RAFFLE_ADDRESS, provider.getSigner());
         console.log("RaffleContract is ", raffleContract);
         let counterTx;
@@ -265,8 +266,8 @@ export const getCurrentRaffleBalance = createAsyncThunk(
         if (!provider) {
             dispatch(error("Please connect your wallet!"));
         }
-        console.log(currentAddress, provider, networkID);
-        // const signer = provider.getSigner();
+        console.log("Information", currentAddress, provider, networkID);
+
         const raffleContract = Raffle__Factory.connect(addresses[networkID].RAFFLE_ADDRESS, provider.getSigner());
         console.log("RaffleContract is ", raffleContract);
         let balanceTx;
@@ -293,8 +294,7 @@ export const getCurrentTickets = createAsyncThunk(
         if (!provider) {
             dispatch(error("Please connect your wallet!"));
         }
-        console.log(currentAddress, provider, networkID);
-        // const signer = provider.getSigner();
+        console.log("Information", currentAddress, provider, networkID);
         const raffleContract = Raffle__Factory.connect(addresses[networkID].RAFFLE_ADDRESS, provider.getSigner());
         console.log("RaffleContract is ", raffleContract);
         let ticketTx;
@@ -314,6 +314,28 @@ export const getCurrentTickets = createAsyncThunk(
     }
 );
 
+export const claimWinnings = createAsyncThunk(
+    "lottery/claimWinnings",
+    async ({ currentAddress, provider, networkID }: IGetInformation, { dispatch }) => {
+        const raffleContract = Raffle__Factory.connect(addresses[networkID].RAFFLE_ADDRESS, provider.getSigner());
+        console.log("LotteryContract is ", raffleContract);
+        let claimTx;
+        try {
+            console.log("Claim Winnings Try")
+            claimTx = await raffleContract.withdrawWinnings();
+            await claimTx.wait();
+            console.log(claimTx);
+        } catch (e: unknown) {
+            console.log((e as IJsonRPCError).message)
+            dispatch(error((e as IJsonRPCError).message));
+        } finally {
+            if (claimTx) {
+                dispatch(clearPendingTxn(claimTx.hash));
+            }
+        }
+    }
+)
+
 export const getTicketsMockTether = createAsyncThunk(
     "lottery/GetTicket",
     async ({ currentAddress, amount, provider, networkID }: IGetTicketsAsyncThunk, { dispatch }) => {
@@ -321,7 +343,6 @@ export const getTicketsMockTether = createAsyncThunk(
             dispatch(error("Please connect your wallet!"));
         }
         console.log(currentAddress, amount, provider, networkID);
-        // const signer = provider.getSigner();
         const raffleContract = Raffle__Factory.connect(addresses[networkID].RAFFLE_ADDRESS, provider.getSigner());
         console.log("LotteryContract is ", raffleContract);
         let approveTx;
@@ -337,70 +358,69 @@ export const getTicketsMockTether = createAsyncThunk(
         console.log("MockTetherContract is ", mockTetherContract);
         console.log("Allowance is ", allowance);
         let a = amount + "0";
-        // console.log("🚀 ~ file: RaffleSlice.ts ~ line 258 ~ a", a)
-        // if (allowance > utils.parseEther(a)) {
-        //     try {
-        //         console.log("Inside allowance bigger than if")
-        //         ticketTx = await raffleContract.getTickets(
-        //             amount,
-        //             overrides);
+        console.log("🚀 ~ file: RaffleSlice.ts ~ line 258 ~ a", a)
+        if (Number(allowance) > Number(utils.parseEther(a))){
+            try {
+                console.log("Inside allowance bigger than if")
+                ticketTx = await raffleContract.getTickets(
+                    amount,
+                    overrides);
 
-        //         await ticketTx.wait();
-        //         console.log(ticketTx);
-        //     } catch (e: unknown) {
-        //         console.log((e as IJsonRPCError).message)
-        //         dispatch(error((e as IJsonRPCError).message));
-        //     } finally {
-        //         if (ticketTx) {
-        //             dispatch(clearPendingTxn(ticketTx.hash));
-        //         }
-        //     }
-        // }
-        // else {
-        try {
-            console.log("Inside allowance less than if", utils.parseEther(a));
-
-            approveTx = await mockTetherContract.approve(raffleContract.address, utils.parseEther(a));
-            dispatch(
-                fetchPendingTxns({
-                    txnHash: approveTx.hash,
-                    text: "Approving " + amount + "Of Tickets",
-                    type: "approve_" + mockTetherContract.name,
-                })
-            )
-            await approveTx.wait();
-            console.log("ApproveTx is : ", approveTx);
-        } catch (e: unknown) {
-            console.log((e as IJsonRPCError).message)
-            dispatch(error((e as IJsonRPCError).message));
-        } finally {
-            if (approveTx) {
-                dispatch(clearPendingTxn(approveTx.hash));
-                console.log("Transaction Approved!");
-                try {
-                    console.log("Inside 2nd Try!");
-                    ticketTx = await raffleContract.getTickets(
-                        amount,
-                        overrides);
-                    dispatch(
-                        fetchPendingTxns({
-                            txnHash: ticketTx.hash,
-                            text: "Approving " + amount + "Of Tickets",
-                            type: "approve_" + raffleContract.name,
-                        })
-                    )
-                    await ticketTx.wait();
-                    console.log("TicketTx is : ", ticketTx);
-                } catch (e: unknown) {
-                    console.log((e as IJsonRPCError).message)
-                    dispatch(error((e as IJsonRPCError).message));
-                } finally {
-                    if (ticketTx) {
-                        dispatch(clearPendingTxn(approveTx.hash));
+                await ticketTx.wait();
+                console.log(ticketTx);
+            } catch (e: unknown) {
+                console.log((e as IJsonRPCError).message)
+                dispatch(error((e as IJsonRPCError).message));
+            } finally {
+                if (ticketTx) {
+                    dispatch(clearPendingTxn(ticketTx.hash));
+                }
+            }
+        }
+        else {
+            try {
+                console.log("Inside allowance less than if", utils.parseEther(a));
+                approveTx = await mockTetherContract.approve(raffleContract.address, utils.parseEther(a));
+                dispatch(
+                    fetchPendingTxns({
+                        txnHash: approveTx.hash,
+                        text: "Approving " + amount + "Of Tickets",
+                        type: "approve_" + mockTetherContract.name,
+                    })
+                )
+                await approveTx.wait();
+                console.log("ApproveTx is : ", approveTx);
+            } catch (e: unknown) {
+                console.log((e as IJsonRPCError).message)
+                dispatch(error((e as IJsonRPCError).message));
+            } finally {
+                if (approveTx) {
+                    dispatch(clearPendingTxn(approveTx.hash));
+                    console.log("Transaction Approved!");
+                    try {
+                        console.log("Inside 2nd Try!");
+                        ticketTx = await raffleContract.getTickets(
+                            amount,
+                            overrides);
+                        dispatch(
+                            fetchPendingTxns({
+                                txnHash: ticketTx.hash,
+                                text: "Approving " + amount + "Of Tickets",
+                                type: "approve_" + raffleContract.name,
+                            })
+                        )
+                        await ticketTx.wait();
+                        console.log("TicketTx is : ", ticketTx);
+                    } catch (e: unknown) {
+                        console.log((e as IJsonRPCError).message)
+                        dispatch(error((e as IJsonRPCError).message));
+                    } finally {
+                        if (ticketTx) {
+                            dispatch(clearPendingTxn(approveTx.hash));
+                        }
                     }
                 }
             }
         }
-        // }
     }
 );
