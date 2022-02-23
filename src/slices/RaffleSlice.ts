@@ -13,7 +13,7 @@ import { MockTether__Factory } from "../Generator/Contracts/MockTetherFactory";
 import { error, info } from "./MessagesSlice";
 import { clearPendingTxn, fetchPendingTxns } from "./PendingTxnsSlice";
 
-export interface IRaffleDetails {
+export type RaffleDetails = {
     readonly winnings: number;
     readonly prizePool: number;
     readonly ticketsLeft: number;
@@ -111,7 +111,7 @@ export const getTicketsUSDC = createAsyncThunk(
 
 export const getRaffleInformation = createAsyncThunk(
     "raffle/getRaffleInformation",
-    async ({ currentAddress, provider, networkID }: IGetInformation, { dispatch }) : Promise<IRaffleDetails> => {
+    async ({ currentAddress, provider, networkID }: IGetInformation, { dispatch }) : Promise<RaffleDetails> => {
         let ticketsLeft = 0,
             raffleCounter = 0,
             winnings = 0,
@@ -121,15 +121,20 @@ export const getRaffleInformation = createAsyncThunk(
             try {
                 const ticketsResult = await dispatch(getTicketsLeft({ currentAddress, provider, networkID }),
                 ).unwrap();
+                console.log("🚀 ~ file: RaffleSlice.ts ~ line 123 ~ ticketsResult", ticketsResult)
                 ticketsLeft = Number(ticketsResult.toString());
+                console.log("🚀 ~ file: RaffleSlice.ts ~ line 125 ~ ticketsLeft", ticketsLeft)
             }
-            catch {
+            catch (e: unknown) {
+                console.log((e as IJsonRPCError).message);
                 console.error("Returned a null response from dispatch(getTicketsLeft)");
             }
             try {
                 const winningsResult = await dispatch(getWinnings({ currentAddress, provider, networkID }),
                 ).unwrap();
+                console.log("🚀 ~ file: RaffleSlice.ts ~ line 133 ~ winningsResult", winningsResult)
                 winnings = Number(winningsResult.toString());
+                console.log("🚀 ~ file: RaffleSlice.ts ~ line 134 ~ winnings", winnings)
             }
             catch {
                 console.error("Returned a null response from dispatch(getWinnings)");
@@ -138,6 +143,7 @@ export const getRaffleInformation = createAsyncThunk(
                 const counterResult = await dispatch(getRaffleCounter({ currentAddress, provider, networkID }),
                 ).unwrap();
                 raffleCounter = Number(counterResult.toString());
+                console.log("🚀 ~ file: RaffleSlice.ts ~ line 143 ~ raffleCounter", raffleCounter)
             }
             catch {
                 console.error("Returned a null response from dispatch(counterResult)");
@@ -146,6 +152,7 @@ export const getRaffleInformation = createAsyncThunk(
                 const currentBalanceResult = await dispatch(getCurrentRaffleBalance({ currentAddress, provider, networkID }),
                 ).unwrap();
                 prizePool = Number(currentBalanceResult.toString());
+                console.log("🚀 ~ file: RaffleSlice.ts ~ line 152 ~ prizePool", prizePool)
             }
             catch {
                 console.error("Returned a null response from dispatch(getCurrentRaffleBalance)");

@@ -184,24 +184,26 @@ contract Raffle is VRFConsumerBase, Ownable, Pausable {
      */
     function fulfillRandomness(bytes32 requestId, uint256 randomness) internal override {
         chainLinkMessageback = msg.sender;
-        require(msg.sender == 0x8C7382F9D8f56b33781fE506E897a4F1e2d17255);
-        uint256 randomWinner = randomness;
-        randomNumbers = expand(randomWinner,101);
+        randomWinner = (randomness % currentTicketAmount) + 1;
     }
 
-    function expand(uint256 randomValue, uint256 n) public returns (uint256[] memory expandedValues) {
-
+    function expand(uint randomNumber,uint256 n, uint256 raffleTicketCount) public pure returns (uint256[] memory expandedValues) {
         expandedValues = new uint256[](n);
         for (uint256 i = 0; i < n; i++) {
-            expandedValues[i] = uint256(keccak256(abi.encode(randomValue, i))) % currentTicketAmount;
+            expandedValues[i] = uint256(keccak256(abi.encode(randomNumber, i))) % raffleTicketCount;
         }
         return expandedValues;
+    }
+
+    function delegateWinners() public onlyOwner
+    {
+        winners(expand(randomWinner,100, currentTicketAmount));
     }
 
     //Winner %62.5 1 Person
     //Secondary Winner %1.25 24 Person
     //%0.001 75 Person
-    function winners() public onlyOwner{
+    function winners(uint256[] memory randomNumbers) public onlyOwner{
         bool primary = false;
         bool secondary = false;
         for(uint256 i = 0; i < 100; i++){
@@ -220,6 +222,7 @@ contract Raffle is VRFConsumerBase, Ownable, Pausable {
     {
         currentRaffleCounter++;
         currentRaffleBalance[currentRaffleCounter] = 0;
+        currentTicketAmount = 0;
     }
 
     function withdrawTeamBalance() public onlyOwner

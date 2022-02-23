@@ -3,7 +3,7 @@ import Reveal from "react-awesome-reveal";
 import { useDispatch } from "react-redux";
 import { getTickets } from "../../helpers/TransactionHelper";
 import { useWeb3Context, Web3ContextProvider } from "../../hooks/Web3Context";
-import { getRaffleInformation, IRaffleDetails } from "../../slices/RaffleSlice";
+import { getRaffleInformation, RaffleDetails } from "../../slices/RaffleSlice";
 import { keyframes } from "@emotion/react";
 
 const inline = keyframes`
@@ -36,11 +36,13 @@ const fadeInUp = keyframes`
 const RaffleInformation: React.FC = () => {
     const dispatch = useDispatch();
     const { connect, provider, address, networkId } = useWeb3Context();
-    const [raffleInformation, setRaffleInformation] = useState<IRaffleDetails>({ winnings: 0, raffleCounter: 0, ticketsLeft: 0, ticketsOwned: 0, prizePool: 0 });
+    const [raffleInformation, setRaffleInformation] = useState<RaffleDetails>({ winnings: 0, raffleCounter: 0, ticketsLeft: 0, ticketsOwned: 0, prizePool: 0 });
     const [mintAmount, setMintAmount] = useState(0);
     useEffect(() => {
-        console.log("In Dispatch GetRaffleInformation Function!");
-        dispatch(getRaffleInformation({ currentAddress: address, provider, networkID: networkId }));
+        if (!address) {
+            console.log("In Dispatch GetRaffleInformation Function!");
+            setRaffleInformation(dispatch<any>(getRaffleInformation({ currentAddress: address, provider, networkID: networkId })));
+        }
     }, [raffleInformation]);
 
     return (
