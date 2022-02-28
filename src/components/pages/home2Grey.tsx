@@ -26,7 +26,7 @@ const homeone = () => (
     <section className='container no-top'>
       <div className='row'>
         <div className="spacer-double"></div>
-        <div className='col-lg-6 mb-3'>
+        <div className='col-lg-12 mb-3'>
           <h2>Get Your Tickets Now</h2>
         </div>
         <MintBox />

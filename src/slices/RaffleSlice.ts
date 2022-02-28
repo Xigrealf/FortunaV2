@@ -117,57 +117,60 @@ export const getRaffleInformation = createAsyncThunk(
             winnings = 0,
             prizePool = 0,
             ticketsOwned = 0;
-        try {
+        if (networkID === 80001) {
             try {
-                const ticketsResult = await dispatch(getTicketsLeft({ currentAddress, provider, networkID }),
-                ).unwrap();
-                console.log("🚀 ~ file: RaffleSlice.ts ~ line 123 ~ ticketsResult", ticketsResult)
-                ticketsLeft = Number(ticketsResult.toString());
-                console.log("🚀 ~ file: RaffleSlice.ts ~ line 125 ~ ticketsLeft", ticketsLeft)
-            }
-            catch (e: unknown) {
-                console.log((e as IJsonRPCError).message);
-                console.error("Returned a null response from dispatch(getTicketsLeft)");
-            }
-            try {
-                const winningsResult = await dispatch(getWinnings({ currentAddress, provider, networkID }),
-                ).unwrap();
-                console.log("🚀 ~ file: RaffleSlice.ts ~ line 133 ~ winningsResult", winningsResult)
-                winnings = Number(winningsResult.toString());
-                console.log("🚀 ~ file: RaffleSlice.ts ~ line 134 ~ winnings", winnings)
+                console.log("80001 Here");
+                try {
+                    const ticketsResult = await dispatch(getTicketsLeft({ currentAddress, provider, networkID }),
+                    ).unwrap();
+                    console.log("🚀 ~ file: RaffleSlice.ts ~ line 123 ~ ticketsResult", ticketsResult)
+                    ticketsLeft = Number(ticketsResult.toString());
+                    console.log("🚀 ~ file: RaffleSlice.ts ~ line 125 ~ ticketsLeft", ticketsLeft)
+                }
+                catch (e: unknown) {
+                    console.log((e as IJsonRPCError).message);
+                    console.error("Returned a null response from dispatch(getTicketsLeft)");
+                }
+                try {
+                    const winningsResult = await dispatch(getWinnings({ currentAddress, provider, networkID }),
+                    ).unwrap();
+                    console.log("🚀 ~ file: RaffleSlice.ts ~ line 133 ~ winningsResult", winningsResult)
+                    winnings = Number(ethers.utils.formatEther(winningsResult.toString()));
+                    console.log("🚀 ~ file: RaffleSlice.ts ~ line 134 ~ winnings", winnings)
+                }
+                catch {
+                    console.error("Returned a null response from dispatch(getWinnings)");
+                }
+                try {
+                    const counterResult = await dispatch(getRaffleCounter({ currentAddress, provider, networkID }),
+                    ).unwrap();
+                    raffleCounter = Number(counterResult.toString());
+                    console.log("🚀 ~ file: RaffleSlice.ts ~ line 143 ~ raffleCounter", raffleCounter)
+                }
+                catch {
+                    console.error("Returned a null response from dispatch(getRaffleCounter)");
+                }
+                try {
+                    const currentBalanceResult = await dispatch(getCurrentRaffleBalance({ currentAddress, provider, networkID }),
+                    ).unwrap();
+                    prizePool = Number(ethers.utils.formatEther(currentBalanceResult.toString()));
+                    console.log("🚀 ~ file: RaffleSlice.ts ~ line 152 ~ prizePool", prizePool)
+                }
+                catch {
+                    console.error("Returned a null response from dispatch(getCurrentRaffleBalance)");
+                }
+                try {
+                    const currentBalanceResult = await dispatch(getCurrentTickets({ currentAddress, provider, networkID }),
+                    ).unwrap();
+                    ticketsOwned = Number(currentBalanceResult.toString());
+                }
+                catch {
+                    console.error("Returned a null response from dispatch(getCurrentTickets)");
+                }
             }
             catch {
-                console.error("Returned a null response from dispatch(getWinnings)");
+                console.error("Something Went Wrong In getRaffleInformation");
             }
-            try {
-                const counterResult = await dispatch(getRaffleCounter({ currentAddress, provider, networkID }),
-                ).unwrap();
-                raffleCounter = Number(counterResult.toString());
-                console.log("🚀 ~ file: RaffleSlice.ts ~ line 143 ~ raffleCounter", raffleCounter)
-            }
-            catch {
-                console.error("Returned a null response from dispatch(counterResult)");
-            }
-            try {
-                const currentBalanceResult = await dispatch(getCurrentRaffleBalance({ currentAddress, provider, networkID }),
-                ).unwrap();
-                prizePool = Number(currentBalanceResult.toString());
-                console.log("🚀 ~ file: RaffleSlice.ts ~ line 152 ~ prizePool", prizePool)
-            }
-            catch {
-                console.error("Returned a null response from dispatch(getCurrentRaffleBalance)");
-            }
-            try {
-                const currentBalanceResult = await dispatch(getCurrentTickets({ currentAddress, provider, networkID }),
-                ).unwrap();
-                ticketsOwned = Number(currentBalanceResult.toString());
-            }
-            catch {
-                console.error("Returned a null response from dispatch(getCurrentTickets)");
-            }
-        }
-        catch {
-            console.error("Something Went Wrong In getRaffleInformation");
         }
         return ({
             winnings: winnings,
@@ -192,7 +195,6 @@ export const getTicketsLeft = createAsyncThunk(
 
         try {
             ticketTx = await raffleContract.ticketsLeft();
-            await ticketTx.wait();
             console.log(ticketTx);
         } catch (e: unknown) {
             console.log((e as IJsonRPCError).message)
@@ -246,7 +248,7 @@ export const getRaffleCounter = createAsyncThunk(
         let counterTx;
 
         try {
-            counterTx = await raffleContract.getRaffleCounter();
+            counterTx = await raffleContract.raffleCounter();
             console.log(counterTx);
         } catch (e: unknown) {
             console.log((e as IJsonRPCError).message)
@@ -351,20 +353,15 @@ export const getTicketsMockTether = createAsyncThunk(
         const allowance = await mockTetherContract.allowance(currentAddress, raffleContract.address)
         const gasPrice = await provider.getGasPrice();
         console.log("🚀 ~ file: RaffleSlice.ts ~ line 229 ~ gasPrice", gasPrice)
-        let overrides: any = {
-            gasLimit: 3000000,
-            gasPrice: gasPrice
-        };
         console.log("MockTetherContract is ", mockTetherContract);
         console.log("Allowance is ", allowance);
         let a = amount + "0";
         console.log("🚀 ~ file: RaffleSlice.ts ~ line 258 ~ a", a)
-        if (Number(allowance) > Number(utils.parseEther(a))){
+        if (Number(allowance) > Number(utils.parseEther(a))) {
             try {
                 console.log("Inside allowance bigger than if")
                 ticketTx = await raffleContract.getTickets(
-                    amount,
-                    overrides);
+                    amount);
 
                 await ticketTx.wait();
                 console.log(ticketTx);
@@ -400,8 +397,7 @@ export const getTicketsMockTether = createAsyncThunk(
                     try {
                         console.log("Inside 2nd Try!");
                         ticketTx = await raffleContract.getTickets(
-                            amount,
-                            overrides);
+                            amount);
                         dispatch(
                             fetchPendingTxns({
                                 txnHash: ticketTx.hash,

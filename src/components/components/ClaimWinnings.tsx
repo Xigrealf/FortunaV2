@@ -33,19 +33,19 @@ const fadeInUp = keyframes`
 
 
 
-const RaffleInformation: React.FC = () => {
+const ClaimWinnings: React.FC = () => {
     const dispatch = useDispatch();
     let Loaded = false;
     let abc: any;
     const { connect, provider, address, networkId } = useWeb3Context();
     const [raffleInformation, setRaffleInformation] = useState<RaffleDetails>({ winnings: 0, raffleCounter: 0, ticketsLeft: 0, ticketsOwned: 0, prizePool: 0 });
     useEffect(() => {
-        console.log("In Dispatch GetRaffleInformation Function!");
-        Loaded = true;
-        getInformation();
+            console.log("In Dispatch GetRaffleInformation Function!");
+            Loaded = true;
+            getInformation();
     }, [networkId]);
 
-    const getInformation = async () => {
+    const getInformation = async() => {
         console.log("Inside Get Information");
         let raffleDetails = await dispatch<any>(getRaffleInformation({ currentAddress: address, provider, networkID: networkId })).unwrap();
         setRaffleInformation(raffleDetails);
@@ -63,20 +63,17 @@ const RaffleInformation: React.FC = () => {
                 )
                 : (
                     <div>
+                        <div className="spacer-single"></div>
                         <div className="row">
-                            <Reveal className='onStep' keyframes={fadeInUp} delay={100} duration={600} triggerOnce>
-                                <h4 className="text-left">Tickets Left: {raffleInformation.ticketsLeft}</h4>
+                        <Reveal className='onStep' keyframes={fadeInUp} delay={200} duration={600} triggerOnce>
+                                <h5 className="">Current Winnings: {raffleInformation.winnings}</h5>
                             </Reveal>
-                            <Reveal className='onStep' keyframes={fadeInUp} delay={200} duration={600} triggerOnce>
-                                <h4 className="text-right">Tickets Owned: {raffleInformation.ticketsOwned}</h4>
-                            </Reveal>
-                            <Reveal className='onStep' keyframes={fadeInUp} delay={200} duration={600} triggerOnce>
-                                <h4 className="text-left">Current Raffle Number: {raffleInformation.raffleCounter}</h4>
-                            </Reveal>
-                            <Reveal className='onStep' keyframes={fadeInUp} delay={200} duration={600} triggerOnce>
-                                <h4 className="text-right">Current Prize Pool: {raffleInformation.prizePool}$</h4>
+                            <Reveal className='onStep d-inline' keyframes={fadeInUp} delay={800} duration={900} triggerOnce>
+                                <span onClick={ClaimWinnings} className="btn-main inline lead">Claim Winnings</span>
+                                <div className="mb-sm-30"></div>
                             </Reveal>
                         </div>
+                        <div className="spacer-single"></div>
                     </div>
                 )
             }
@@ -84,4 +81,4 @@ const RaffleInformation: React.FC = () => {
     );
 };
 
-export default RaffleInformation;
+export default ClaimWinnings;

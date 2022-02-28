@@ -4,6 +4,7 @@ import { keyframes } from "@emotion/react";
 import MintTicketButton from './Buttons/MintTicketButton';
 import styled from "styled-components";
 import RaffleInformation from './RaffleInformation';
+import ClaimWinnings from './ClaimWinnings';
 
 const fadeInUp = keyframes`
   0% {
@@ -57,9 +58,7 @@ const MintBox = () => (
                 </div>
             </Reveal>
             <div className="text">
-                <div className="text-center">
-                    <MintTicketButton />
-                </div>
+                <MintTicketButton />
             </div>
             <i className="wm icon_wallet"></i>
         </div>
@@ -78,7 +77,7 @@ const MintBox = () => (
             <div className="feature-box f-boxed style-3">
                 <div className="text">
                     <div className="text-center">
-                        <RaffleInformation />
+                        <ClaimWinnings />
                     </div>
                 </div>
                 <i className="wm icon_cloud-upload_alt"></i>

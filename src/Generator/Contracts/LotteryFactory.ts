@@ -4,6 +4,46 @@ import { FortunaRaffleInterface } from "../Other/FortunaRaffle";
 
 const _abi = [
 	{
+		"inputs": [],
+		"name": "delegateWinners",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getRandomNumber",
+		"outputs": [
+			{
+				"internalType": "bytes32",
+				"name": "requestId",
+				"type": "bytes32"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "ticketAmount",
+				"type": "uint256"
+			}
+		],
+		"name": "getTickets",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "pause",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "contract Tether",
@@ -47,6 +87,78 @@ const _abi = [
 		"type": "event"
 	},
 	{
+		"inputs": [
+			{
+				"internalType": "bytes32",
+				"name": "requestId",
+				"type": "bytes32"
+			},
+			{
+				"internalType": "uint256",
+				"name": "randomness",
+				"type": "uint256"
+			}
+		],
+		"name": "rawFulfillRandomness",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "renounceOwnership",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "resetLottery",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "sendCharityBalance",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "contractAddress",
+				"type": "address"
+			}
+		],
+		"name": "setNFTAddress",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "newOwner",
+				"type": "address"
+			}
+		],
+		"name": "transferOwnership",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "unpause",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"anonymous": false,
 		"inputs": [
 			{
@@ -58,6 +170,112 @@ const _abi = [
 		],
 		"name": "Unpaused",
 		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "ticketLimit",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "ticketPerWalletLimit",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "ticketPriceUpdate",
+				"type": "uint256"
+			}
+		],
+		"name": "updateLottery",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "common",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "uncommon",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "rare",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "epic",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "legendary",
+				"type": "string"
+			}
+		],
+		"name": "updateNFT",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "raffleyPerc",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "teamPerc",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "charityPerc",
+				"type": "uint256"
+			}
+		],
+		"name": "updatePercentages",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256[]",
+				"name": "randomNumbers",
+				"type": "uint256[]"
+			}
+		],
+		"name": "winners",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "withdrawTeamBalance",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "withdrawWinnings",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
 	},
 	{
 		"inputs": [],
@@ -184,12 +402,17 @@ const _abi = [
 		"inputs": [
 			{
 				"internalType": "uint256",
-				"name": "randomValue",
+				"name": "randomNumber",
 				"type": "uint256"
 			},
 			{
 				"internalType": "uint256",
 				"name": "n",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "raffleTicketCount",
 				"type": "uint256"
 			}
 		],
@@ -201,7 +424,33 @@ const _abi = [
 				"type": "uint256[]"
 			}
 		],
-		"stateMutability": "nonpayable",
+		"stateMutability": "pure",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getCurrentRaffleBalance",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getCurrentTickets",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -225,45 +474,6 @@ const _abi = [
 			}
 		],
 		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "getRaffleInformation",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "getRandomNumber",
-		"outputs": [
-			{
-				"internalType": "bytes32",
-				"name": "requestId",
-				"type": "bytes32"
-			}
-		],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "ticketAmount",
-				"type": "uint256"
-			}
-		],
-		"name": "getTickets",
-		"outputs": [],
-		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -346,13 +556,6 @@ const _abi = [
 	},
 	{
 		"inputs": [],
-		"name": "pause",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
 		"name": "paused",
 		"outputs": [
 			{
@@ -401,14 +604,8 @@ const _abi = [
 		"type": "function"
 	},
 	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"name": "randomNumbers",
+		"inputs": [],
+		"name": "randomWinner",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -417,58 +614,6 @@ const _abi = [
 			}
 		],
 		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "bytes32",
-				"name": "requestId",
-				"type": "bytes32"
-			},
-			{
-				"internalType": "uint256",
-				"name": "randomness",
-				"type": "uint256"
-			}
-		],
-		"name": "rawFulfillRandomness",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "renounceOwnership",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "resetLottery",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "sendCharityBalance",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "contractAddress",
-				"type": "address"
-			}
-		],
-		"name": "setNFTAddress",
-		"outputs": [],
-		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -572,105 +717,6 @@ const _abi = [
 		"type": "function"
 	},
 	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "newOwner",
-				"type": "address"
-			}
-		],
-		"name": "transferOwnership",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "unpause",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "ticketLimit",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "ticketPerWalletLimit",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "ticketPriceUpdate",
-				"type": "uint256"
-			}
-		],
-		"name": "updateLottery",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "common",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "uncommon",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "rare",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "epic",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "legendary",
-				"type": "string"
-			}
-		],
-		"name": "updateNFT",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "raffleyPerc",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "teamPerc",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "charityPerc",
-				"type": "uint256"
-			}
-		],
-		"name": "updatePercentages",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
 		"inputs": [],
 		"name": "winner",
 		"outputs": [
@@ -681,27 +727,6 @@ const _abi = [
 			}
 		],
 		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "winners",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "withdrawTeamBalance",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "withdrawWinnings",
-		"outputs": [],
-		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{

@@ -26,7 +26,7 @@ const footer = () => (
                                 <li><Link to="">Partners</Link></li>
                                 <li><Link to="">Suggestions</Link></li> */}
                                 <li><a href="https://discord.gg/5CuuX4f5">Discord</a></li>
-                                <li><a href="https://daniel-breiby.gitbook.io/fortuna-protocol/">GitBook</a></li>
+                                <li><a href="https://fortuna-1.gitbook.io/fortuna-protocol/">GitBook</a></li>
                                 {/* <li><Link to="">Newsletter</Link></li> */}
                             </ul>
                     </div>
@@ -70,7 +70,7 @@ const footer = () => (
                             <div className="de-flex-col">
                                 <div className="social-icons">
                                     {/* <span onClick={() => window.open("", "_self")}><i className="fa fa-facebook fa-lg"></i></span> */}
-                                    <span onClick={() => window.open("", "_self")}><i className="fa fa-twitter fa-lg"></i></span>
+                                    <span onClick={() => window.open("https://twitter.com/FortunaProtocol", "_self")}><i className="fa fa-twitter fa-lg"></i></span>
                                     {/* <span onClick={() => window.open("", "_self")}><i className="fa fa-linkedin fa-lg"></i></span>
                                     <span onClick={() => window.open("", "_self")}><i className="fa fa-pinterest fa-lg"></i></span>
                                     <span onClick={() => window.open("", "_self")}><i className="fa fa-rss fa-lg"></i></span> */}
