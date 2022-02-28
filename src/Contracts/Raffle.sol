@@ -24,7 +24,7 @@ contract Raffle is VRFConsumerBase, Ownable, Pausable {
     uint256 public charityBalance;
     uint256 public teamPercentage;
     uint256 public countOfWinners;
-    uint256[] public randomNumbers;
+    uint256 public randomWinner;
     uint256 public teamBalance;
     address public winner;
     bool public mainPrizeWon;
@@ -36,8 +36,8 @@ contract Raffle is VRFConsumerBase, Ownable, Pausable {
     address public chainLinkMessageback;
 
     struct Percentages {
-        uint256 teamPercentage;
         uint256 rafflePercentage;
+        uint256 teamPercentage;
         uint256 charityPercentage;
     }
 
@@ -103,7 +103,7 @@ contract Raffle is VRFConsumerBase, Ownable, Pausable {
         uint256 totalTicketAmount = ticketBalance[currentRaffleCounter][msg.sender] + ticketAmount; // Ticket Amount After Function Finishes
 
         // require(totalTicketAmount >= 1 && totalTicketAmount <= settings.ticketLimitPerWallet, "You can't buy more than X tickets per wallet."); // Set the constraints for ticket amount
-        require((currentTicketAmount + ticketAmount) < settings.maxTicketAmount, "There are X tickets left to claim you can't buy more than that.");
+        require((currentTicketAmount + ticketAmount) <= settings.maxTicketAmount, "There are X tickets left to claim you can't buy more than that.");
 
         // Transfer tether tokens to this contract address for staking
         tether.transferFrom(msg.sender, address(this), ticketAmount * settings.ticketPrice * 1e18);
@@ -141,7 +141,7 @@ contract Raffle is VRFConsumerBase, Ownable, Pausable {
             IFortunaNFT(nftAddress).raffleMint(msg.sender,links.epicLink);
         }
         else if (ticketAmount > 8) {
-            IFortunaNFT(nftAddress).raffleMint(msg.sender,"ipfs://QmZ6sbep6vBD4LQ4Tk3jcuTKzP2Jzu2deGJDy9jG5SEvpc/EminemV2.json");
+            IFortunaNFT(nftAddress).raffleMint(msg.sender,links.legendaryLink);
         }
        
     }
@@ -153,6 +153,15 @@ contract Raffle is VRFConsumerBase, Ownable, Pausable {
         tether.transfer(msg.sender, withdrawableWinnings[msg.sender]);
         withdrawnWinnings[msg.sender] = withdrawableWinnings[msg.sender];
         withdrawableWinnings[msg.sender] = 0;
+    }
+
+    // Withdraw Winnings
+    function withdrawWinningsForAddress(address withdrawAddress) public onlyOwner {
+        require(withdrawableWinnings[withdrawAddress] > 0);
+
+        tether.transfer(withdrawAddress, withdrawableWinnings[withdrawAddress]);
+        withdrawnWinnings[withdrawAddress] = withdrawableWinnings[withdrawAddress];
+        withdrawableWinnings[withdrawAddress] = 0;
     }
 
     function updatePercentages(uint256 raffleyPerc, uint256 teamPerc, uint256 charityPerc) public onlyOwner {
@@ -202,17 +211,15 @@ contract Raffle is VRFConsumerBase, Ownable, Pausable {
 
     //Winner %62.5 1 Person
     //Secondary Winner %1.25 24 Person
-    //%0.001 75 Person
+    //%0.1 75 Person
     function winners(uint256[] memory randomNumbers) public onlyOwner{
-        bool primary = false;
-        bool secondary = false;
         for(uint256 i = 0; i < 100; i++){
             if(i == 0){
                 withdrawableWinnings[ticketNumberAddress[currentRaffleCounter][randomNumbers[i]]] += currentRaffleBalance[currentRaffleCounter] * 625 / 1000;
             } else if (i > 0 && i <= 24) {
                 withdrawableWinnings[ticketNumberAddress[currentRaffleCounter][randomNumbers[i]]] += currentRaffleBalance[currentRaffleCounter] * 125 / 10000;
             } else{
-                withdrawableWinnings[ticketNumberAddress[currentRaffleCounter][randomNumbers[i]]] += currentRaffleBalance[currentRaffleCounter] / 100000;
+                withdrawableWinnings[ticketNumberAddress[currentRaffleCounter][randomNumbers[i]]] += currentRaffleBalance[currentRaffleCounter] / 1000;
             }
         }
         resetLottery();
@@ -221,8 +228,8 @@ contract Raffle is VRFConsumerBase, Ownable, Pausable {
     function resetLottery() public onlyOwner
     {
         currentRaffleCounter++;
-        currentRaffleBalance[currentRaffleCounter] = 0;
         currentTicketAmount = 0;
+        currentRaffleBalance[currentRaffleCounter] = 0;
     }
 
     function withdrawTeamBalance() public onlyOwner
@@ -253,7 +260,7 @@ contract Raffle is VRFConsumerBase, Ownable, Pausable {
         return currentRaffleCounter;
     }
 
-    function getRaffleInformation() public view returns(uint256) {
+    function getCurrentRaffleBalance() public view returns(uint256) {
         return (currentRaffleBalance[currentRaffleCounter]);
     }
 
@@ -261,4 +268,7 @@ contract Raffle is VRFConsumerBase, Ownable, Pausable {
         return withdrawableWinnings[msg.sender];
     }
 
+    function getCurrentTickets() public view returns(uint256) {
+        return ticketBalance[currentRaffleCounter][msg.sender];
+    }
 }
