@@ -5,7 +5,7 @@ import Reveal from "react-awesome-reveal";
 import { useDispatch } from "react-redux";
 import { getTickets } from "../../../helpers/TransactionHelper";
 import { useWeb3Context, Web3ContextProvider } from "../../../hooks/Web3Context";
-import { getTicketsMockTether } from "../../../slices/RaffleSlice";
+import { getTicketsMockTether, getTicketsUSDC } from "../../../slices/RaffleSlice";
 import { keyframes } from "@emotion/react";
 
 const inline = keyframes`
@@ -38,7 +38,7 @@ const MintTicketButton: React.FC = () => {
     const [mintAmount, setMintAmount] = useState(0);
     const GetTicket = async () => {
         console.log("In Dispatch Function!");
-        await dispatch(getTicketsMockTether({ currentAddress: address, amount: mintAmount.toString(), provider, networkID: networkId }));
+        await dispatch(getTicketsUSDC({ currentAddress: address, amount: mintAmount.toString(), provider, networkID: networkId }));
     }
     // const GetTicketWithAmount = async (amount: number) => {
     //     setMintAmount(amount);

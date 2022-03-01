@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.4.22 <0.9.0;
 
-import './Tether.sol';
+import './IStable.sol';
 import './IFortunaNFT.sol';
 import "@chainlink/contracts/src/v0.8/VRFConsumerBase.sol";
 import "@openzeppelin/contracts@4.4.2/security/Pausable.sol";
@@ -9,7 +9,7 @@ import "@openzeppelin/contracts@4.4.2/access/Ownable.sol";
 
 /// @custom:security-contact fortuna@fortuna.wtf
 contract Raffle is VRFConsumerBase, Ownable, Pausable {
-    string public name = 'Lottery HQ';
+    string public name = 'Fortuna Trial';
 
     mapping(uint256 => mapping(uint256 => address)) public ticketNumberAddress;
     mapping(uint256 => mapping(address => uint256)) public depositBalance;
@@ -29,7 +29,7 @@ contract Raffle is VRFConsumerBase, Ownable, Pausable {
     address public winner;
     bool public mainPrizeWon;
     bytes32 internal keyHash;
-    Tether public tether;
+    address public stableCoinAddress;
     uint256 internal fee;
     address public nftAddress;
     uint256 public currentRaffleCounter;
@@ -59,18 +59,18 @@ contract Raffle is VRFConsumerBase, Ownable, Pausable {
     RaffleSettings settings;
     NFTLinks links;
 
-    constructor(Tether _tether)
+    constructor(address _stable)
         VRFConsumerBase(
-        0x8C7382F9D8f56b33781fE506E897a4F1e2d17255, // VRF Coordinator
-        0x326C977E6efc84E512bB9C30f76E30c160eD06FB  // LINK Token
+        0x3d2341ADb2D31f1c5530cDC622016af293177AE0, // VRF Coordinator
+        0xb0897686c545045aFc77CF20eC7A532E3120E0F1  // LINK Token
         )
     {
-        keyHash = 0x6e75b569a01ef56d18cab6a8e71e6600d6ce853834d4a5748b720d06f878b3a4;
+        keyHash = 0xf86195cf7690c55907b2b611ebb7343a6f649bff128701cc542f0569e2c549da;
         fee = 0.0001 * 10 ** 18; // 0.1 LINK (Varies by network)
   
-        tether = _tether;
+        stableCoinAddress = _stable;
 
-        settings = RaffleSettings(5000,5000,10);
+        settings = RaffleSettings(500,500,1);
         links = NFTLinks(
         "ipfs://QmZ6sbep6vBD4LQ4Tk3jcuTKzP2Jzu2deGJDy9jG5SEvpc/TylerDurdenV2.json",
         "ipfs://QmZ6sbep6vBD4LQ4Tk3jcuTKzP2Jzu2deGJDy9jG5SEvpc/SonicV2.json",
@@ -106,7 +106,7 @@ contract Raffle is VRFConsumerBase, Ownable, Pausable {
         require((currentTicketAmount + ticketAmount) <= settings.maxTicketAmount, "There are X tickets left to claim you can't buy more than that.");
 
         // Transfer tether tokens to this contract address for staking
-        tether.transferFrom(msg.sender, address(this), ticketAmount * settings.ticketPrice * 1e18);
+        IStable(stableCoinAddress).transferFrom(msg.sender, address(this), ticketAmount * settings.ticketPrice * 1e6 / 100);
 
         // Update Ticket Balance
         ticketBalance[currentRaffleCounter][msg.sender] = ticketBalance[currentRaffleCounter][msg.sender] + ticketAmount;
@@ -118,13 +118,13 @@ contract Raffle is VRFConsumerBase, Ownable, Pausable {
         currentTicketAmount += ticketAmount;
 
         //MintNFT
-        mintNFT(ticketAmount);
+        // mintNFT(ticketAmount);
         // Update Deposited Tether Balance
         depositBalance[currentRaffleCounter][msg.sender] = depositBalance[currentRaffleCounter][msg.sender] + ticketAmount * settings.ticketPrice  * 1e18;
 
-        charityBalance += ticketAmount * settings.ticketPrice * percentages.charityPercentage / 100 * 1e18;//To Charity
-        teamBalance += ticketAmount * settings.ticketPrice * percentages.teamPercentage / 100 * 1e18; //To Team
-        currentRaffleBalance[currentRaffleCounter] += ticketAmount * settings.ticketPrice * percentages.rafflePercentage / 100 * 1e18; //To Lottery Pool
+        charityBalance += ticketAmount * settings.ticketPrice * percentages.charityPercentage / 100 * 1e6 / 100;//To Charity
+        teamBalance += ticketAmount * settings.ticketPrice * percentages.teamPercentage / 100 * 1e6 / 100; //To Team
+        currentRaffleBalance[currentRaffleCounter] += ticketAmount * settings.ticketPrice * percentages.rafflePercentage / 100 * 1e6 / 100; //To Lottery Pool
     }
 
     function mintNFT(uint256 ticketAmount) internal {
@@ -150,7 +150,7 @@ contract Raffle is VRFConsumerBase, Ownable, Pausable {
     function withdrawWinnings() public {
         require(withdrawableWinnings[msg.sender] > 0);
 
-        tether.transfer(msg.sender, withdrawableWinnings[msg.sender]);
+        IStable(stableCoinAddress).transfer(msg.sender, withdrawableWinnings[msg.sender]);
         withdrawnWinnings[msg.sender] = withdrawableWinnings[msg.sender];
         withdrawableWinnings[msg.sender] = 0;
     }
@@ -159,7 +159,7 @@ contract Raffle is VRFConsumerBase, Ownable, Pausable {
     function withdrawWinningsForAddress(address withdrawAddress) public onlyOwner {
         require(withdrawableWinnings[withdrawAddress] > 0);
 
-        tether.transfer(withdrawAddress, withdrawableWinnings[withdrawAddress]);
+        IStable(stableCoinAddress).transfer(withdrawAddress, withdrawableWinnings[withdrawAddress]);
         withdrawnWinnings[withdrawAddress] = withdrawableWinnings[withdrawAddress];
         withdrawableWinnings[withdrawAddress] = 0;
     }
@@ -235,13 +235,13 @@ contract Raffle is VRFConsumerBase, Ownable, Pausable {
     function withdrawTeamBalance() public onlyOwner
     {
         //Send Token To Team Wallet
-        tether.transfer(msg.sender, teamBalance);
+        IStable(stableCoinAddress).transfer(msg.sender, teamBalance);
     }
 
     function sendCharityBalance() public onlyOwner
     {
         //Send Charity Balance
-        tether.transfer(msg.sender, charityBalance);
+        IStable(stableCoinAddress).transfer(msg.sender, charityBalance);
     }
 
     function ticketsLeft() public view returns (uint256) {

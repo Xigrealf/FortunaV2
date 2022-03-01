@@ -45,13 +45,17 @@ export const getTicketsUSDC = createAsyncThunk(
         let ticketTx;
         const USDCContract = USDC__Factory.connect(addresses[networkID].USDC_ADDRESS, provider.getSigner());
         const allowance = await USDCContract.allowance(currentAddress, raffleContract.address)
+        console.log("🚀 ~ file: RaffleSlice.ts ~ line 48 ~ allowance", Number(allowance))
 
-        console.log("MockTetherContract is ", USDCContract);
-        console.log("Allowance is ", allowance);
-        if (allowance > utils.parseEther(amount)) {
+        // let a = amount + "0";
+        let a = amount + "00000";
+        console.log("🚀 ~ file: RaffleSlice.ts ~ line 258 ~ a", a)
+        if (Number(allowance) > Number(a)) {
             try {
                 console.log("Inside allowance bigger than if")
-                ticketTx = await raffleContract.getTickets(amount);
+                ticketTx = await raffleContract.getTickets(
+                    amount);
+
                 await ticketTx.wait();
                 console.log(ticketTx);
             } catch (e: unknown) {
@@ -65,8 +69,8 @@ export const getTicketsUSDC = createAsyncThunk(
         }
         else {
             try {
-                console.log("Inside allowance less than if", utils.parseEther(amount));
-                approveTx = await USDCContract.approve(raffleContract.address, utils.parseEther(amount));
+                console.log("Inside allowance less than if", a);
+                approveTx = await USDCContract.approve(raffleContract.address, a);
                 dispatch(
                     fetchPendingTxns({
                         txnHash: approveTx.hash,
@@ -82,10 +86,11 @@ export const getTicketsUSDC = createAsyncThunk(
             } finally {
                 if (approveTx) {
                     dispatch(clearPendingTxn(approveTx.hash));
-                    console.log("Transaciotn Approved!");
+                    console.log("Transaction Approved!");
                     try {
                         console.log("Inside 2nd Try!");
-                        ticketTx = await raffleContract.getTickets(amount);
+                        ticketTx = await raffleContract.getTickets(
+                            amount);
                         dispatch(
                             fetchPendingTxns({
                                 txnHash: ticketTx.hash,
@@ -352,9 +357,7 @@ export const getTicketsMockTether = createAsyncThunk(
         const mockTetherContract = MockTether__Factory.connect(addresses[networkID].MOCKTETHER_ADDRESS, provider.getSigner());
         const allowance = await mockTetherContract.allowance(currentAddress, raffleContract.address)
         const gasPrice = await provider.getGasPrice();
-        console.log("🚀 ~ file: RaffleSlice.ts ~ line 229 ~ gasPrice", gasPrice)
-        console.log("MockTetherContract is ", mockTetherContract);
-        console.log("Allowance is ", allowance);
+
         let a = amount + "0";
         console.log("🚀 ~ file: RaffleSlice.ts ~ line 258 ~ a", a)
         if (Number(allowance) > Number(utils.parseEther(a))) {
