@@ -14,7 +14,7 @@ contract FortunaNFT is ERC721, ERC721URIStorage, Pausable, Ownable, ERC721Burnab
 
     Counters.Counter private _tokenIdCounter;
     address public contractAddress = address(0xd31B829e3B5665C2806343030394cA838FA52dAA);
-    constructor() ERC721("Fortuna Collection : Raffle - 1", "MTK") {}
+    constructor() ERC721("Fortuna Collection : Raffle 1", "MTK") {}
 
     function _baseURI() internal pure override returns (string memory) {
         return "";

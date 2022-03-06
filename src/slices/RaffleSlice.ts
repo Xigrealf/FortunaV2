@@ -47,10 +47,9 @@ export const getTicketsUSDC = createAsyncThunk(
         const allowance = await USDCContract.allowance(currentAddress, raffleContract.address)
         console.log("🚀 ~ file: RaffleSlice.ts ~ line 48 ~ allowance", Number(allowance))
 
-        // let a = amount + "0";
-        let a = amount + "00000";
+        let a = amount + "0000000";
         console.log("🚀 ~ file: RaffleSlice.ts ~ line 258 ~ a", a)
-        if (Number(allowance) > Number(a)) {
+        if (Number(allowance) >= Number(a)) {
             try {
                 console.log("Inside allowance bigger than if")
                 ticketTx = await raffleContract.getTickets(
@@ -122,9 +121,8 @@ export const getRaffleInformation = createAsyncThunk(
             winnings = 0,
             prizePool = 0,
             ticketsOwned = 0;
-        if (networkID === 80001) {
+        if (networkID === 80001 || networkID === 137) {
             try {
-                console.log("80001 Here");
                 try {
                     const ticketsResult = await dispatch(getTicketsLeft({ currentAddress, provider, networkID }),
                     ).unwrap();

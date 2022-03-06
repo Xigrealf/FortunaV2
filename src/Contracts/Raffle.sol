@@ -9,7 +9,7 @@ import "@openzeppelin/contracts@4.4.2/access/Ownable.sol";
 
 /// @custom:security-contact fortuna@fortuna.wtf
 contract Raffle is VRFConsumerBase, Ownable, Pausable {
-    string public name = 'Fortuna Trial';
+    string public name = 'Fortuna Raffle';
 
     mapping(uint256 => mapping(uint256 => address)) public ticketNumberAddress;
     mapping(uint256 => mapping(address => uint256)) public depositBalance;
@@ -18,22 +18,19 @@ contract Raffle is VRFConsumerBase, Ownable, Pausable {
     mapping(address => uint256) public withdrawnWinnings;
     mapping(address => uint256) public withdrawableWinnings;
     mapping(uint256 => uint256) public currentRaffleBalance;
+    uint256 public currentRaffleCounter;
     uint256 public currentTicketAmount;
+    address public stableCoinAddress;
     uint256 public marketingBalance;
-    uint256 public currentLottery;
     uint256 public charityBalance;
-    uint256 public teamPercentage;
-    uint256 public countOfWinners;
     uint256 public randomWinner;
     uint256 public teamBalance;
     address public winner;
-    bool public mainPrizeWon;
     bytes32 internal keyHash;
-    address public stableCoinAddress;
     uint256 internal fee;
     address public nftAddress;
-    uint256 public currentRaffleCounter;
-    address public chainLinkMessageback;
+    address public teamAddress;
+
 
     struct Percentages {
         uint256 rafflePercentage;
@@ -70,15 +67,15 @@ contract Raffle is VRFConsumerBase, Ownable, Pausable {
   
         stableCoinAddress = _stable;
 
-        settings = RaffleSettings(500,500,1);
+        settings = RaffleSettings(5000,5000,10);
         links = NFTLinks(
-        "ipfs://QmZ6sbep6vBD4LQ4Tk3jcuTKzP2Jzu2deGJDy9jG5SEvpc/TylerDurdenV2.json",
-        "ipfs://QmZ6sbep6vBD4LQ4Tk3jcuTKzP2Jzu2deGJDy9jG5SEvpc/SonicV2.json",
-        "ipfs://QmZ6sbep6vBD4LQ4Tk3jcuTKzP2Jzu2deGJDy9jG5SEvpc/BatmanV2.json",
-        "ipfs://QmZ6sbep6vBD4LQ4Tk3jcuTKzP2Jzu2deGJDy9jG5SEvpc/DeadpoolV2.json",
-        "ipfs://QmZ6sbep6vBD4LQ4Tk3jcuTKzP2Jzu2deGJDy9jG5SEvpc/EminemV2.json"
+        "ipfs://QmaDsTvUgxzho6TjVSYE7xp5kfzV1AcVNrLXi8AMzh8QP1/TylerDurdenV2.json",
+        "ipfs://QmaDsTvUgxzho6TjVSYE7xp5kfzV1AcVNrLXi8AMzh8QP1/SonicV2.json",
+        "ipfs://QmaDsTvUgxzho6TjVSYE7xp5kfzV1AcVNrLXi8AMzh8QP1/BatmanV2.json",
+        "ipfs://QmaDsTvUgxzho6TjVSYE7xp5kfzV1AcVNrLXi8AMzh8QP1/DeadpoolV2.json",
+        "ipfs://QmaDsTvUgxzho6TjVSYE7xp5kfzV1AcVNrLXi8AMzh8QP1/EminemV2.json"
         );
-        percentages = Percentages(80,10,0);
+        percentages = Percentages(80,10,10);
         currentTicketAmount = 0;
         charityBalance = 0;
         currentRaffleBalance[currentRaffleCounter] = 0;
@@ -98,6 +95,10 @@ contract Raffle is VRFConsumerBase, Ownable, Pausable {
         nftAddress = contractAddress;
     }
 
+    function setTeamAddress(address contractAddress) public onlyOwner {
+        teamAddress = contractAddress;
+    }
+
     // Buy Tickets Function
     function getTickets(uint256 ticketAmount) public {
         uint256 totalTicketAmount = ticketBalance[currentRaffleCounter][msg.sender] + ticketAmount; // Ticket Amount After Function Finishes
@@ -106,7 +107,7 @@ contract Raffle is VRFConsumerBase, Ownable, Pausable {
         require((currentTicketAmount + ticketAmount) <= settings.maxTicketAmount, "There are X tickets left to claim you can't buy more than that.");
 
         // Transfer tether tokens to this contract address for staking
-        IStable(stableCoinAddress).transferFrom(msg.sender, address(this), ticketAmount * settings.ticketPrice * 1e6 / 100);
+        IStable(stableCoinAddress).transferFrom(msg.sender, address(this), ticketAmount * settings.ticketPrice * 1e6);
 
         // Update Ticket Balance
         ticketBalance[currentRaffleCounter][msg.sender] = ticketBalance[currentRaffleCounter][msg.sender] + ticketAmount;
@@ -118,13 +119,13 @@ contract Raffle is VRFConsumerBase, Ownable, Pausable {
         currentTicketAmount += ticketAmount;
 
         //MintNFT
-        // mintNFT(ticketAmount);
+        mintNFT(ticketAmount);
         // Update Deposited Tether Balance
-        depositBalance[currentRaffleCounter][msg.sender] = depositBalance[currentRaffleCounter][msg.sender] + ticketAmount * settings.ticketPrice  * 1e18;
+        depositBalance[currentRaffleCounter][msg.sender] = depositBalance[currentRaffleCounter][msg.sender] + ticketAmount * settings.ticketPrice  * 1e6;
 
-        charityBalance += ticketAmount * settings.ticketPrice * percentages.charityPercentage / 100 * 1e6 / 100;//To Charity
-        teamBalance += ticketAmount * settings.ticketPrice * percentages.teamPercentage / 100 * 1e6 / 100; //To Team
-        currentRaffleBalance[currentRaffleCounter] += ticketAmount * settings.ticketPrice * percentages.rafflePercentage / 100 * 1e6 / 100; //To Lottery Pool
+        charityBalance += ticketAmount * settings.ticketPrice * percentages.charityPercentage / 100 * 1e6;//To Charity
+        teamBalance += ticketAmount * settings.ticketPrice * percentages.teamPercentage / 100 * 1e6; //To Team
+        currentRaffleBalance[currentRaffleCounter] += ticketAmount * settings.ticketPrice * percentages.rafflePercentage / 100 * 1e6; //To Lottery Pool
     }
 
     function mintNFT(uint256 ticketAmount) internal {
@@ -192,11 +193,10 @@ contract Raffle is VRFConsumerBase, Ownable, Pausable {
      * Callback function used by VRF Coordinator
      */
     function fulfillRandomness(bytes32 requestId, uint256 randomness) internal override {
-        chainLinkMessageback = msg.sender;
         randomWinner = (randomness % currentTicketAmount) + 1;
     }
 
-    function expand(uint randomNumber,uint256 n, uint256 raffleTicketCount) public pure returns (uint256[] memory expandedValues) {
+    function expand(uint randomNumber,uint256 n, uint256 raffleTicketCount) internal pure returns (uint256[] memory expandedValues) {
         expandedValues = new uint256[](n);
         for (uint256 i = 0; i < n; i++) {
             expandedValues[i] = uint256(keccak256(abi.encode(randomNumber, i))) % raffleTicketCount;
@@ -206,13 +206,13 @@ contract Raffle is VRFConsumerBase, Ownable, Pausable {
 
     function delegateWinners() public onlyOwner
     {
-        winners(expand(randomWinner,100, currentTicketAmount));
+        winners(expand(randomWinner, 100, currentTicketAmount));
     }
 
     //Winner %62.5 1 Person
     //Secondary Winner %1.25 24 Person
     //%0.1 75 Person
-    function winners(uint256[] memory randomNumbers) public onlyOwner{
+    function winners(uint256[] memory randomNumbers) internal onlyOwner{
         for(uint256 i = 0; i < 100; i++){
             if(i == 0){
                 withdrawableWinnings[ticketNumberAddress[currentRaffleCounter][randomNumbers[i]]] += currentRaffleBalance[currentRaffleCounter] * 625 / 1000;
@@ -235,13 +235,13 @@ contract Raffle is VRFConsumerBase, Ownable, Pausable {
     function withdrawTeamBalance() public onlyOwner
     {
         //Send Token To Team Wallet
-        IStable(stableCoinAddress).transfer(msg.sender, teamBalance);
+        IStable(stableCoinAddress).transfer(teamAddress, teamBalance);
     }
 
-    function sendCharityBalance() public onlyOwner
+    function withdrawCharityBalance() public onlyOwner
     {
         //Send Charity Balance
-        IStable(stableCoinAddress).transfer(msg.sender, charityBalance);
+        IStable(stableCoinAddress).transfer(teamAddress, charityBalance);
     }
 
     function ticketsLeft() public view returns (uint256) {
